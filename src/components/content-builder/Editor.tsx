@@ -1,15 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
-// import fs from 'fs'
-import { Fragment, useState } from "react";
 import {
   FormProvider,
   useFieldArray,
   useForm,
   useFormContext,
 } from "react-hook-form";
+import { Block, Page, Section } from "./types";
 import { ReactSortable } from "react-sortablejs";
-import TiptapEditor from "./tiptap";
-import { Page, Section, Block } from "../../index.d";
+import TiptapEditor from "./tiptap/tiptap";
+import { useState } from "react";
 
 const convertStylesStringToObject = (stringStyles: string) =>
   typeof stringStyles === "string"
@@ -37,23 +35,22 @@ interface Params {
   onSubmit?: (page: Page) => void;
 }
 
-const ContentEditor = ({ data, onSubmit }: Params) => {
-  // ? Prevent content drag for tiptap when is sorting
+const Editor = ({ data, onChange }: Params) => {
   const [isSorting, setIsSorting] = useState<boolean>(false);
   const methods = useForm<Page>({
     values: data,
   });
 
-  const { handleSubmit, control, watch } = methods;
+  const { handleSubmit, control, setValue, watch } = methods;
 
-  const { fields: sections } = useFieldArray({
+  const { fields: sections, update } = useFieldArray({
     control,
     name: `sections`,
     keyName: "keyId",
   });
 
   const onSubmitHandler = async (page: Page) => {
-    onSubmit && onSubmit(page);
+    const payload = page as Page;
   };
 
   return (
@@ -61,17 +58,8 @@ const ContentEditor = ({ data, onSubmit }: Params) => {
       <form
         onSubmit={handleSubmit(onSubmitHandler, (err) => console.error(err))}
       >
-        <div className="w-full flex justify-center">
-          {/* <ReactSortable
-            style={{ ...convertStylesStringToObject(watch('style')) }}
-            list={sections}
-            setList={(sections) => {
-              setValue('sections', sections)
-            }}
-          > */}
-          <div style={{ ...convertStylesStringToObject(watch("style")) }}>
-            {sections.map((section, i) => {
-              const css = `
+        {sections.map((section, i) => {
+          const css = `
                 #${section.id} {
                   ${section.style}
                 }
@@ -81,39 +69,25 @@ const ContentEditor = ({ data, onSubmit }: Params) => {
                   } 
                 }
               `;
-              return (
-                <Fragment key={`${section.id}-style`}>
-                  <style>{css}</style>
-                  <SectionEditor
-                    isSorting={isSorting}
-                    setIsSorting={setIsSorting}
-                    key={section.id}
-                    section={section}
-                    index={i}
-                  />
-                </Fragment>
-              );
-            })}
-            {/* </ReactSortable> */}
-          </div>
-        </div>
-
-        <br />
-        <hr />
-        <div className="w-full flex justify-center">
-          <button
-            className="px-2 py-2 bg-black text-white rounded"
-            type="submit"
-          >
-            Save
-          </button>
-        </div>
+          return (
+            <div key={`${section.id}-style`}>
+              <style>{css}</style>
+              <SectionEditor
+                isSorting={isSorting}
+                setIsSorting={setIsSorting}
+                key={section.id}
+                section={section}
+                index={i}
+              />
+            </div>
+          );
+        })}
       </form>
     </FormProvider>
   );
 };
 
-export default ContentEditor;
+export default Editor;
 
 const SectionEditor = ({
   section,

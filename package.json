@@ -1,11 +1,13 @@
 {
   "name": "@noowah/content-builder",
-  "version": "0.0.5-beta.5",
+  "version": "0.0.5-beta.6",
   "description": "",
   "license": "MIT",
   "scripts": {
     "dev": "rollup -c --watch",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -45,9 +47,19 @@
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
+    "@chromatic-com/storybook": "^1.9.0",
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@storybook/addon-essentials": "^8.3.1",
+    "@storybook/addon-interactions": "^8.3.1",
+    "@storybook/addon-links": "^8.3.1",
+    "@storybook/addon-onboarding": "^8.3.1",
+    "@storybook/addon-webpack5-compiler-swc": "^1.0.5",
+    "@storybook/blocks": "^8.3.1",
+    "@storybook/react": "^8.3.1",
+    "@storybook/react-webpack5": "^8.3.1",
+    "@storybook/test": "^8.3.1",
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.0",
     "@types/jest": "^29.5.12",
@@ -62,7 +74,7 @@
     "rollup": "^4.21.0",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-postcss": "^4.0.2",
-    "storybook": "^8.2.9",
+    "storybook": "^8.3.1",
     "tslib": "^2.7.0",
     "typescript": "^5.5.4"
   },
@@ -81,6 +93,6 @@
     "@tiptap/starter-kit": "^2.6.6",
     "@tiptap/suggestion": "^2.6.6",
     "react-hook-form": "7.53.0",
-    "react-sortablejs": "6.1.4"
+    "react-sortablejs": "^6.1.4"
   }
 }

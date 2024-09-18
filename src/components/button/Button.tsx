@@ -1,11 +1,23 @@
-import React, { HTMLAttributes } from "react";
+import './Button.css';
 
-interface Params extends HTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode | React.ReactNode[];
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary';
 }
 
-const Button = ({ children, ...props }: Params) => {
-  return <button {...props}>{children}</button>;
+const Button = ({ variant, ...props }: ButtonProps) => {
+const styles = () => {
+    const propStyle = props.style ?? {};
+    if (props.disabled) return propStyle;
+    if (variant === 'primary') return { borderColor: '#6366F1', backgroundColor: '#6366F1', color: '#FAFAFA', ...propStyle };
+    if (variant === 'secondary') return { borderColor: '#6366F1', backgroundColor: '#FAFAFA', color: '#6366F1', ...propStyle };
+    return propStyle;
+  };
+
+  return (
+    <button {...props} style={styles()}>
+      {props.children}
+    </button>
+  );
 };
 
 export default Button;

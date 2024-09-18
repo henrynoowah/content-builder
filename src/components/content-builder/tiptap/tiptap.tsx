@@ -9,9 +9,9 @@ import OrderedList from "@tiptap/extension-ordered-list";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import TextStyle from "@tiptap/extension-text-style";
-import { EditorContent, FloatingMenu as FMenu, useEditor } from "@tiptap/react";
-import CommandsPlugin from "./extensions/commands/commands";
+import { EditorContent, useEditor, FloatingMenu as FMenu } from "@tiptap/react";
 import CustomDiv from "./extensions/custom-div";
+import CommandsPlugin from "./extensions/commands/commands";
 
 interface Params {
   content?: string;
@@ -21,13 +21,13 @@ interface Params {
 
 // Then, you would register this custom node in your Tiptap editor schema.
 
-const TiptapEditor = ({ content, onUpdate }: Params) => {
+const TiptapEditor = ({ content, onUpdate, disabled }: Params) => {
   const editor = useEditor({
     immediatelyRender: false,
     editorProps: {
       attributes: {
         // class: `focus:outline-none bg-white text-black font-mono`
-        class: `focus:outline-none cursor-text`,
+        // class: `focus:outline-none cursor-text`,
       },
     },
     extensions: [
@@ -46,7 +46,7 @@ const TiptapEditor = ({ content, onUpdate }: Params) => {
         },
       }),
       Focus.configure({
-        className: "ring-[1px] ring-gray-300/20 ring-inset rounded",
+        // className: "ring-[1px] ring-gray-300/20 ring-inset rounded",
         mode: "all",
       }),
       // DraggableItem,
@@ -66,7 +66,7 @@ const TiptapEditor = ({ content, onUpdate }: Params) => {
         },
       }),
       FloatingMenu.configure({
-        shouldShow: ({ editor }) => {
+        shouldShow: ({ editor, view, state, oldState }) => {
           return editor.isActive("paragraph");
         },
       }),
@@ -74,11 +74,11 @@ const TiptapEditor = ({ content, onUpdate }: Params) => {
       // HardBreak.configure({
       //   keepMarks: true,
       //   HTMLAttributes: {
-      //     style: ''
-      //   }
-      // })
+      //     style: "",
+      //   },
+      // }),
     ],
-    onUpdate: ({ editor }) => {
+    onUpdate: ({ editor, transaction }) => {
       // onUpdate(editor.getHTML())
       onUpdate(
         editor
