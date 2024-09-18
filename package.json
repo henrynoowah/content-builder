@@ -1,6 +1,6 @@
 {
   "name": "@noowah/content-builder",
-  "version": "0.0.5-beta.2",
+  "version": "0.0.5-beta.5",
   "description": "",
   "license": "MIT",
   "scripts": {
@@ -13,12 +13,6 @@
   "files": [
     "dist"
   ],
-  "jest": {
-    "testEnvironment": "jsdom",
-    "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/src/tests/styleMock.ts"
-    }
-  },
   "babel": {
     "sourceType": "unambiguous",
     "presets": [
@@ -74,5 +68,19 @@
   },
   "peerDependencies": {
     "react": "^18.3.1"
+  },
+  "dependencies": {
+    "@tiptap/extension-color": "^2.6.6",
+    "@tiptap/extension-floating-menu": "^2.6.6",
+    "@tiptap/extension-focus": "^2.6.6",
+    "@tiptap/extension-highlight": "^2.6.6",
+    "@tiptap/extension-list-item": "^2.6.4",
+    "@tiptap/extension-text-style": "^2.6.6",
+    "@tiptap/pm": "^2.5.9",
+    "@tiptap/react": "^2.6.6",
+    "@tiptap/starter-kit": "^2.6.6",
+    "@tiptap/suggestion": "^2.6.6",
+    "react-hook-form": "7.53.0",
+    "react-sortablejs": "6.1.4"
   }
 }
