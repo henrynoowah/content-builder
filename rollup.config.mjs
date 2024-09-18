@@ -26,6 +26,7 @@ export default [
       typescript({ tsconfig: './tsconfig.json', exclude: ['**/*.test.tsx', '**/*.test.ts', '**/*.stories.ts'] }),
       postcss({ extensions: ['.css'], inject: true, extract: false }),
     ],
+    external: ["react", "react-dom"]
   },
   {
     input: 'dist/esm/types/index.d.ts',

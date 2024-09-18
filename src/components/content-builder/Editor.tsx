@@ -35,22 +35,22 @@ interface Params {
   onSubmit?: (page: Page) => void;
 }
 
-const Editor = ({ data, onChange }: Params) => {
+const Editor = ({ data, onSubmit }: Params) => {
   const [isSorting, setIsSorting] = useState<boolean>(false);
   const methods = useForm<Page>({
     values: data,
   });
 
-  const { handleSubmit, control, setValue, watch } = methods;
+  const { handleSubmit, control } = methods;
 
-  const { fields: sections, update } = useFieldArray({
+  const { fields: sections } = useFieldArray({
     control,
     name: `sections`,
     keyName: "keyId",
   });
 
   const onSubmitHandler = async (page: Page) => {
-    const payload = page as Page;
+    onSubmit && onSubmit(page);
   };
 
   return (

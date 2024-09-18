@@ -21,7 +21,11 @@ interface Params {
 
 // Then, you would register this custom node in your Tiptap editor schema.
 
-const TiptapEditor = ({ content, onUpdate, disabled }: Params) => {
+const TiptapEditor = ({
+  // disabled
+  content,
+  onUpdate,
+}: Params) => {
   const editor = useEditor({
     immediatelyRender: false,
     editorProps: {
@@ -66,7 +70,10 @@ const TiptapEditor = ({ content, onUpdate, disabled }: Params) => {
         },
       }),
       FloatingMenu.configure({
-        shouldShow: ({ editor, view, state, oldState }) => {
+        shouldShow: ({
+          editor,
+          // view, state, oldState
+        }) => {
           return editor.isActive("paragraph");
         },
       }),
@@ -78,7 +85,10 @@ const TiptapEditor = ({ content, onUpdate, disabled }: Params) => {
       //   },
       // }),
     ],
-    onUpdate: ({ editor, transaction }) => {
+    onUpdate: ({
+      editor,
+      //  transaction
+    }) => {
       // onUpdate(editor.getHTML())
       onUpdate(
         editor
