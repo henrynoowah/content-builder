@@ -12,8 +12,6 @@ A React component for building and managing web content, designed to offer a fle
 
 ## Installation
 
-To install the package using `npm`, run:
-
 ```bash
 npm install @noowah/content-builder
 yarn add @noowah/content-builder
