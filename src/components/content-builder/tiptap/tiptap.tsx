@@ -56,7 +56,7 @@ const TiptapEditor = ({
       // DraggableItem,
       ListItem.configure({
         HTMLAttributes: {
-          style: "margin: 0 0 0 1.25rem",
+          // style: "margin: 0 0 0 1.25rem",
         },
       }),
       BulletList.configure({

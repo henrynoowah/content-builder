@@ -29,8 +29,7 @@ export const Default: Story = {
         description: "Learn more about our company, mission, and values.",
         keywords: ["company", "mission", "values"],
       },
-      style:
-        "width: 1024px; max-width: 100%; display:flex; flex-direction:column; align-items:center; gap: 16px;",
+      style: "width: 1024px; max-width: 100%;",
       sections: [
         {
           id: "section-1",

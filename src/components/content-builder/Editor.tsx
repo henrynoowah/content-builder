@@ -34,7 +34,6 @@ interface Params {
   onChange?: (page: Page) => void;
   onSubmit?: (page: Page) => void;
 }
-
 const Editor = ({ data, onSubmit }: Params) => {
   const [isSorting, setIsSorting] = useState<boolean>(false);
   const methods = useForm<Page>({
@@ -53,24 +52,37 @@ const Editor = ({ data, onSubmit }: Params) => {
     onSubmit && onSubmit(page);
   };
 
+  const containerName = "content-container";
+
   return (
     <FormProvider {...methods}>
       <form
+        style={{
+          containerName,
+          ...convertStylesStringToObject(data?.style ?? ""),
+        }}
         onSubmit={handleSubmit(onSubmitHandler, (err) => console.error(err))}
       >
         {sections.map((section, i) => {
           const css = `
-                #${section.id} {
-                  ${section.style}
-                }
-                @media (max-width: 768px) {
-                  #${section.id} {
-                    ${section.style_mobile}
-                  } 
-                }
-              `;
+            #${section.id} {
+              ${section.style}
+            }
+            @container ${containerName} (max-width: 768px) {
+              #${section.id} {
+                ${section.style_mobile}
+              }
+            }
+          `;
           return (
-            <div key={`${section.id}-style`}>
+            <div
+              key={`${section.id}-style`}
+              id={`section-${section.id}`}
+              style={{
+                containerType: "inline-size",
+                containerName: containerName,
+              }} // Apply container properties
+            >
               <style>{css}</style>
               <SectionEditor
                 isSorting={isSorting}
