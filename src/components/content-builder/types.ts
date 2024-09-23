@@ -1,8 +1,17 @@
 type Page = {
+  id: string;
   title: string;
   slug: string;
   style: string;
   sections: Section[];
+  created_at: string;
+  updated_at: string;
+  url: string;
+  seo: {
+    title: string;
+    description: string;
+    keywords: string[];
+  };
 };
 
 type Section = {
