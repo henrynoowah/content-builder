@@ -202,10 +202,8 @@ const BlockEditor = ({
           </div>
         ))}
 
-      <div className="absolute pointer-events-none -top-5 -start-5 w-10 h-10 rounded-full bg-gray-50 text-blue-400 px-2 py-1 text-sm opacity-0 group-hover/block:opacity-100 flex justify-center items-center">
-        <button type="button" className="pointer-events-auto handle">
-          |||
-        </button>
+      <div className="absolute pointer-events-none -top-5 -start-5 w-10 h-10 aspect-square rounded-full bg-gray-50 text-blue-400 px-2 py-1 text-sm opacity-0 group-hover/block:opacity-100 flex justify-center items-center">
+        <div className="pointer-events-auto handle">|||</div>
       </div>
     </div>
   );
