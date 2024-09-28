@@ -6,7 +6,8 @@ const meta: Meta<typeof Editor> = {
   title: "UI/Editor",
   component: Editor,
   tags: ["autodocs"],
-  parameters: { layout: "centered" },
+  parameters: { layout: "full" },
+  // parameters: { layout: "centered" },
 };
 
 export default meta;
@@ -57,7 +58,7 @@ export const Default: Story = {
               type: "image",
               id: "block-1",
               style: "",
-              src: "https://picsum.photos/640/480",
+              src: "https://velog.velcdn.com/images/henrynoowah/post/cb5c90fb-81d9-492d-b6dc-9cbb3af6ab2a/image.png",
               alt: "Our Team",
               caption: "Meet Our Team",
               images: [],
@@ -82,7 +83,7 @@ export const Default: Story = {
               type: "image",
               id: "block-4",
               style: "",
-              src: "https://picsum.photos/640/480",
+              src: "https://velog.velcdn.com/images/henrynoowah/post/7db404ca-3263-49ab-8566-9922d0a0b3e9/image.png",
               alt: "Our Team",
               caption: "Meet Our Team",
               images: [],

@@ -1,10 +1,10 @@
 {
   "name": "@noowah/content-builder",
-  "version": "0.0.5-beta.9",
+  "version": "0.0.5-beta.15",
   "description": "",
   "license": "MIT",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -42,6 +42,9 @@
     "react-dom": "^18.3.1"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@tiptap/extension-color": "^2.6.6",
     "@tiptap/extension-floating-menu": "^2.6.6",
     "@tiptap/extension-focus": "^2.6.6",
@@ -54,8 +57,6 @@
     "@tiptap/suggestion": "^2.6.6",
     "autoprefixer": "^10.4.20",
     "react-hook-form": "7.53.0",
-    "react-sortablejs": "^6.1.4",
-    "sortablejs": "1.14",
     "tailwindcss": "^3.4.13"
   }
 }

@@ -1,14 +1,25 @@
 import {
+  closestCorners,
+  DndContext,
+  PointerSensor,
+  UniqueIdentifier,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  rectSwappingStrategy,
+  SortableContext,
+  useSortable,
+} from "@dnd-kit/sortable";
+import {
   FormProvider,
   useFieldArray,
   useForm,
   useFormContext,
 } from "react-hook-form";
-import { Block, Page, Section } from "./types";
-import { ReactSortable } from "react-sortablejs";
 import TiptapEditor from "./tiptap/tiptap";
-import { useState } from "react";
-
+import { Block, Page, Section } from "./types";
 const convertStylesStringToObject = (stringStyles: string) =>
   typeof stringStyles === "string"
     ? stringStyles.split(";").reduce((acc, style) => {
@@ -35,7 +46,6 @@ interface Params {
   onSubmit?: (page: Page) => void;
 }
 const Editor = ({ data, onSubmit }: Params) => {
-  const [isSorting, setIsSorting] = useState<boolean>(false);
   const methods = useForm<Page>({
     values: data,
   });
@@ -58,8 +68,8 @@ const Editor = ({ data, onSubmit }: Params) => {
     <FormProvider {...methods}>
       <form
         style={{
-          containerName,
           ...convertStylesStringToObject(data?.style ?? ""),
+          containerName,
         }}
         onSubmit={handleSubmit(onSubmitHandler, (err) => console.error(err))}
       >
@@ -84,13 +94,7 @@ const Editor = ({ data, onSubmit }: Params) => {
               }} // Apply container properties
             >
               <style>{css}</style>
-              <SectionEditor
-                isSorting={isSorting}
-                setIsSorting={setIsSorting}
-                key={section.id}
-                section={section}
-                index={i}
-              />
+              <SectionEditor key={section.id} section={section} index={i} />
             </div>
           );
         })}
@@ -104,13 +108,9 @@ export default Editor;
 const SectionEditor = ({
   section,
   index,
-  isSorting,
-  setIsSorting,
 }: {
   section: Section;
   index: number;
-  isSorting: boolean;
-  setIsSorting: (isSorting: boolean) => void;
 }) => {
   const { control, setValue } = useFormContext<Page>();
   const { fields: blocks, update } = useFieldArray({
@@ -119,38 +119,52 @@ const SectionEditor = ({
     keyName: "keyId",
   });
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 250 },
+      // activationConstraint: { delay: 250, tolerance: 0 },
+    })
+    // useSensor(TouchSensor),
+    // useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
   return (
-    <ReactSortable
-      id={section.id}
-      // swap={true}
-      // forceFallback={true}
-      key={section.id}
-      // style={{ ...convertStylesStringToObject(section.style ?? '') }}
-      animation={150}
-      swapThreshold={1}
-      list={blocks}
-      setList={(blocks) => {
-        setValue(`sections.${index}.blocks`, blocks);
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      onDragEnd={({ active, over }) => {
+        if (!over || active.id === over.id) return;
+
+        const getPosition = (id: UniqueIdentifier) =>
+          blocks.findIndex((x) => x.id === id);
+
+        const originalPos = getPosition(active.id);
+
+        const newPos = getPosition(over.id);
+
+        setValue(
+          `sections.${index}.blocks`,
+          arrayMove(blocks, originalPos, newPos)
+        );
       }}
-      onChoose={() => setIsSorting(true)}
-      onUnchoose={() => setIsSorting(false)}
-      onEnd={() => setIsSorting(false)}
-      handle=".handle"
     >
-      {blocks?.map((block, i) => (
-        <BlockEditor
-          isSorting={isSorting}
-          key={`block-container-${block.id}-${i}`}
-          block={block}
-          onChange={(block) => update(i, block)}
-        />
-      ))}
-    </ReactSortable>
+      <section id={section.id}>
+        <SortableContext items={blocks} strategy={rectSwappingStrategy}>
+          {blocks?.map((block, i) => (
+            <BlockEditor
+              key={`block-container-${block.id}-${i}`}
+              block={block}
+              onChange={(block) => update(i, block)}
+            />
+          ))}
+        </SortableContext>
+      </section>
+    </DndContext>
   );
 };
 
+import { CSS } from "@dnd-kit/utilities";
 const BlockEditor = ({
-  isSorting,
   block,
   onChange,
 }: {
@@ -158,18 +172,28 @@ const BlockEditor = ({
   block: Block;
   onChange: (block: Block) => void;
 }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: block.id,
+    });
+
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
   return (
     <div
+      ref={setNodeRef}
       id={block.id}
       style={{
         ...convertStylesStringToObject(block.style ?? ""),
+        ...style,
       }}
       onClick={() => {}}
       className="relative group/block ring-[1px] ring-transparent hover:ring-blue-400/60 cursor-pointer"
+      {...attributes}
+      {...listeners}
     >
-      {isSorting && (
-        <span className="absolute start-0 top-0 z-10 w-full h-full bg-gray-300/20" />
-      )}
       {block.type === "html" && (
         <TiptapEditor
           key={`section-block-container-${block.id}`}
@@ -201,10 +225,6 @@ const BlockEditor = ({
             />
           </div>
         ))}
-
-      <div className="absolute pointer-events-none -top-5 -start-5 w-10 h-10 aspect-square rounded-full bg-gray-50 text-blue-400 px-2 py-1 text-sm opacity-0 group-hover/block:opacity-100 flex justify-center items-center">
-        <div className="pointer-events-auto handle">|||</div>
-      </div>
     </div>
   );
 };
