@@ -120,12 +120,12 @@ export const Default: Story = {
               style: "",
               images: [
                 {
-                  src: "https://picsum.photos/100",
+                  src: "https://velog.velcdn.com/images/henrynoowah/post/cb5c90fb-81d9-492d-b6dc-9cbb3af6ab2a/image.png",
                   alt: "Image 1",
                   caption: "Image 1 caption",
                 },
                 {
-                  src: "https://picsum.photos/200",
+                  src: "https://velog.velcdn.com/images/henrynoowah/post/7db404ca-3263-49ab-8566-9922d0a0b3e9/image.png",
                   alt: "Image 2",
                   caption: "Image 2 caption",
                 },
