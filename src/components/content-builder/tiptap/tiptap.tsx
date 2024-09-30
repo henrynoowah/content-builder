@@ -30,7 +30,7 @@ const TiptapEditor = ({
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        // class: `focus:outline-none bg-white text-black font-mono`
+        class: `focus:outline-none bg-white text-black font-mono`,
         // class: `focus:outline-none cursor-text`,
       },
     },
@@ -56,7 +56,7 @@ const TiptapEditor = ({
       // DraggableItem,
       ListItem.configure({
         HTMLAttributes: {
-          // style: "margin: 0 0 0 1.25rem",
+          style: "margin: 0 0 0 1.25rem",
         },
       }),
       BulletList.configure({
@@ -101,12 +101,18 @@ const TiptapEditor = ({
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
       <EditorContent editor={editor} />
 
       {editor && (
         <FMenu editor={editor}>
-          <span className="opacity-80 text-sm font-light">
+          <span
+            style={{
+              opacity: 0.8,
+              fontSize: "0.875rem",
+              lineHeight: "1.25rem",
+            }}
+          >
             Type / to browse options
           </span>
         </FMenu>

@@ -66,18 +66,30 @@ export class CommandsView extends Component<SuggestionProps> {
     const { items } = this.props;
 
     return (
-      <div className="bg-gray-800 flex flex-col items-start text-sm rounded overflow-hidden">
+      <div
+        style={{
+          backgroundColor: "#1F2937",
+          border: "1px solid gray",
+          borderRadius: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+          overflow: "hidden",
+        }}
+      >
         {items.map((item, index) => {
           return (
             <button
               type="button"
-              className={`
-                w-full px-2 py-1 text-start
-                ${
-                  index === this.state.selectedIndex
-                    ? "active bg-gray-200 text-black"
-                    : ""
-                }`}
+              style={{
+                width: "100%",
+                padding: "4px 8px",
+                textAlign: "start",
+                fontSize: 12,
+                ...(index === this.state.selectedIndex
+                  ? { backgroundColor: "#FFFFFF", color: "black" }
+                  : { backgroundColor: "transparent", color: "white" }),
+              }}
               {...item.attrs}
               key={index}
               onClick={() => this.selectItem(index)}
