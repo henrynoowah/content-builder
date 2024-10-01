@@ -30,7 +30,7 @@ const TiptapEditor = ({
     immediatelyRender: false,
     editorProps: {
       attributes: {
-        // class: `focus:outline-none bg-white text-black font-mono`
+        class: `focus:nwcb-outline-none nwcb-cursor-text`,
         // class: `focus:outline-none cursor-text`,
       },
     },
