@@ -10,7 +10,6 @@ import {
   arrayMove,
   rectSwappingStrategy,
   SortableContext,
-  useSortable,
 } from "@dnd-kit/sortable";
 import {
   FormProvider,
@@ -18,8 +17,9 @@ import {
   useForm,
   useFormContext,
 } from "react-hook-form";
-import TiptapEditor from "./tiptap/tiptap";
-import { Block, Page, Section } from "./types";
+import { Page, Section } from "./types";
+import { lazy } from "react";
+
 const convertStylesStringToObject = (stringStyles: string) =>
   typeof stringStyles === "string"
     ? stringStyles.split(";").reduce((acc, style) => {
@@ -105,6 +105,7 @@ const Editor = ({ data, onSubmit }: Params) => {
 
 export default Editor;
 
+const BlockEditor = lazy(() => import("./block-editor"));
 const SectionEditor = ({
   section,
   index,
@@ -160,71 +161,5 @@ const SectionEditor = ({
         </SortableContext>
       </section>
     </DndContext>
-  );
-};
-
-import { CSS } from "@dnd-kit/utilities";
-const BlockEditor = ({
-  block,
-  onChange,
-}: {
-  isSorting?: boolean;
-  block: Block;
-  onChange: (block: Block) => void;
-}) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({
-      id: block.id,
-    });
-
-  const style = {
-    transition,
-    transform: CSS.Transform.toString(transform),
-  };
-  return (
-    <div
-      ref={setNodeRef}
-      id={block.id}
-      style={{
-        ...convertStylesStringToObject(block.style ?? ""),
-        ...style,
-      }}
-      onClick={() => {}}
-      className="relative group/block ring-[1px] ring-transparent hover:ring-blue-400/60 cursor-pointer"
-      {...attributes}
-      {...listeners}
-    >
-      {block.type === "html" && (
-        <TiptapEditor
-          key={`section-block-container-${block.id}`}
-          content={block.content}
-          onUpdate={(value) => {
-            onChange({ ...block, content: value });
-          }}
-        />
-      )}
-      {block.type === "image" && (
-        <img
-          key={`section-block-container-${block.id}`}
-          src={block.src}
-          alt={block.alt}
-          style={{ objectFit: "contain" }}
-        />
-      )}
-      {block.type === "gallery" &&
-        block.images.map((image: any) => (
-          <div
-            key={`section-block-container-${block.id}-${image.alt}`}
-            className="w-full relative flex justify-center items-center bg-gray-400"
-          >
-            <img
-              src={image.src}
-              alt={image.keyId}
-              style={{}}
-              className="object-contain"
-            />
-          </div>
-        ))}
-    </div>
   );
 };
