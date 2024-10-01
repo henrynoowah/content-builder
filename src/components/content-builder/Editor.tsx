@@ -17,9 +17,9 @@ import {
   useForm,
   useFormContext,
 } from "react-hook-form";
-import { Page, Section } from "./types";
 import { lazy } from "react";
 import { convertStylesStringToObject } from "../../lib";
+import { Page, Section } from "@src/types";
 
 interface Params {
   data?: Page;

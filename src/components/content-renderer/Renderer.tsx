@@ -1,7 +1,7 @@
 import { Fragment } from "react/jsx-runtime";
 import { convertStylesStringToObject } from "../../lib";
-import { Block, Page } from "../content-builder/types";
 import { lazy } from "react";
+import { Block, Page } from "@src/types";
 
 const Carousel = lazy(() => import("../content-builder/carousel"));
 

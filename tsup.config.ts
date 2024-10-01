@@ -1,14 +1,25 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  // The file we created above that will be the entrypoint to the library.
-  entry: ["src/index.ts"],
-  // Enable TypeScript type definitions to be generated in the output.
-  // This provides type-definitions to consumers.
+  // Entry point of the library
+  entry: {
+    index: "src/index.ts",
+    ["content-builder"]: "src/components/content-builder/index.ts",
+  },
+  // entry: ["src/**/index.ts"],
+  format: ["cjs", "esm"],
+  // Generate TypeScript declaration files
   dts: true,
-  // Clean the `dist` directory before building.
-  // This is useful to ensure the output is only the latest.
+  // Clean the output directory before building
   clean: true,
-  // Sourcemaps for easier debugging.
+  // Generate source maps for easier debugging
   sourcemap: true,
+  // Enable minification (optional but useful for production)
+  minify: true,
+  // Allow tree-shaking by not bundling dependencies (for ESM)
+  splitting: true,
+  // Enable code splitting, important for tree-shaking
+  treeshake: true,
+  // Specify the output directory
+  outDir: "dist",
 });

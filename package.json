@@ -1,6 +1,6 @@
 {
   "name": "@noowah/content-builder",
-  "version": "0.0.5-beta.19",
+  "version": "0.0.5-beta.24",
   "description": "",
   "license": "MIT",
   "scripts": {
@@ -8,9 +8,10 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [ "dist" , "README.md" ],
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",
     "@storybook/addon-essentials": "^8.3.4",

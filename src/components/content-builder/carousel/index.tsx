@@ -1,5 +1,5 @@
+import { Block } from "@src/types";
 import useEmblaCarousel from "embla-carousel-react";
-import { Block } from "../types";
 
 const Carousel = ({ images }: Block) => {
   const [emblaRef, emblaApi] = useEmblaCarousel();

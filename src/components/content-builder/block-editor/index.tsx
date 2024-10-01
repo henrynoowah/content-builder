@@ -1,9 +1,11 @@
 import { useSortable } from "@dnd-kit/sortable";
-import Carousel from "../carousel";
-import { Block } from "../types";
 import { CSS } from "@dnd-kit/utilities";
-import TiptapEditor from "../tiptap/tiptap";
 import { convertStylesStringToObject } from "../../../lib";
+import { lazy } from "react";
+import { Block } from "@src/types";
+
+const TiptapEditor = lazy(() => import("../tiptap/tiptap"));
+const Carousel = lazy(() => import("../carousel"));
 
 const BlockEditor = ({
   block,
@@ -22,6 +24,7 @@ const BlockEditor = ({
     transition,
     transform: CSS.Transform.toString(transform),
   };
+
   return (
     <div
       ref={setNodeRef}
