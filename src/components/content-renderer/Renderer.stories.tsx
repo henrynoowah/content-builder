@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import Editor from "./Editor";
+import Renderer from "./Renderer";
 
 // Explicitly typing meta as Meta<typeof Editor>
-const meta: Meta<typeof Editor> = {
-  title: "UI/Editor",
-  component: Editor,
+const meta: Meta<typeof Renderer> = {
+  title: "UI/Renderer",
+  component: Renderer,
   tags: ["autodocs"],
   parameters: { layout: "full" },
   // parameters: { layout: "centered" },
@@ -16,8 +16,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    onChange: () => {},
-    onSubmit: () => {},
     data: {
       id: "page_1",
       title: "About Us",

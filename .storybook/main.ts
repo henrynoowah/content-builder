@@ -1,5 +1,4 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
-import path from "path";
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -10,17 +9,30 @@ const config: StorybookConfig = {
     "@storybook/addon-essentials",
     "@chromatic-com/storybook",
     "@storybook/addon-interactions",
+    "@storybook/addon-themes",
+    // {
+    //   /**
+    //    * Fix Storybook issue with PostCSS@8
+    //    * @see https://github.com/storybookjs/storybook/issues/12668#issuecomment-773958085
+    //    */
+    //   //postcss를 활용할 수 있도록 이 부분 추가.
+    //   name: "@storybook/addon-postcss",
+    //   options: {
+    //     postcssLoaderOptions: {
+    //       implementation: require("postcss"),
+    //     },
+    //   },
+    // },
     {
-      /**
-       * Fix Storybook issue with PostCSS@8
-       * @see https://github.com/storybookjs/storybook/issues/12668#issuecomment-773958085
-       */
-      //postcss를 활용할 수 있도록 이 부분 추가.
-      name: "@storybook/addon-postcss",
+      name: "@storybook/addon-styling-webpack",
       options: {
-        postcssLoaderOptions: {
-          implementation: require("postcss"),
-        },
+        rules: [
+          // Replaces existing CSS rules with given rule
+          {
+            test: /\.css$/,
+            use: ["style-loader", "css-loader"],
+          },
+        ],
       },
     },
   ],

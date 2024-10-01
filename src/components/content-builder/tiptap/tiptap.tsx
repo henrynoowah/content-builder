@@ -12,6 +12,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import { EditorContent, useEditor, FloatingMenu as FMenu } from "@tiptap/react";
 import CustomDiv from "./extensions/custom-div";
 import CommandsPlugin from "./extensions/commands/commands";
+import Heading from "@tiptap/extension-heading";
 
 interface Params {
   content?: string;
@@ -37,6 +38,7 @@ const TiptapEditor = ({
     extensions: [
       Document,
       Paragraph,
+      Heading,
       // Paragraph2,
       Text,
       Color,
@@ -53,7 +55,6 @@ const TiptapEditor = ({
         // className: "ring-[1px] ring-gray-300/20 ring-inset rounded",
         mode: "all",
       }),
-      // DraggableItem,
       ListItem.configure({
         HTMLAttributes: {
           style: "margin: 0 0 0 1.25rem",

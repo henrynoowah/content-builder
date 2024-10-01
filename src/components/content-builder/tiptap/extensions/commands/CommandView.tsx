@@ -85,6 +85,7 @@ export class CommandsView extends Component<SuggestionProps> {
                 width: "100%",
                 padding: "4px 8px",
                 textAlign: "start",
+                border: "none",
                 fontSize: 12,
                 ...(index === this.state.selectedIndex
                   ? { backgroundColor: "#FFFFFF", color: "black" }

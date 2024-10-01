@@ -3,26 +3,7 @@ import Carousel from "../carousel";
 import { Block } from "../types";
 import { CSS } from "@dnd-kit/utilities";
 import TiptapEditor from "../tiptap/tiptap";
-
-const convertStylesStringToObject = (stringStyles: string) =>
-  typeof stringStyles === "string"
-    ? stringStyles.split(";").reduce((acc, style) => {
-        const colonPosition = style.indexOf(":");
-
-        if (colonPosition === -1) {
-          return acc;
-        }
-
-        const camelCaseProperty = style
-            .substring(0, colonPosition)
-            .trim()
-            .replace(/^-ms-/, "ms-")
-            .replace(/-./g, (c) => c.substring(1).toUpperCase()),
-          value = style.substring(colonPosition + 1).trim();
-
-        return value ? { ...acc, [camelCaseProperty]: value } : acc;
-      }, {})
-    : {};
+import { convertStylesStringToObject } from "../../../lib";
 
 const BlockEditor = ({
   block,
@@ -50,7 +31,7 @@ const BlockEditor = ({
         ...style,
       }}
       onClick={() => {}}
-      className="relative group/block ring-[1px] ring-transparent hover:ring-blue-400/60 cursor-pointer"
+      className="nwcb-relative group/block nwcb-ring-[1px] nwcb-ring-transparent hover:nwcb-ring-blue-400/60 nwcb-cursor-pointer"
       {...attributes}
       {...listeners}
     >
@@ -68,7 +49,12 @@ const BlockEditor = ({
           key={`section-block-container-${block.id}`}
           src={block.src}
           alt={block.alt}
-          style={{ objectFit: "contain" }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            objectPosition: "center",
+          }}
         />
       )}
       {block.type === "gallery" && <Carousel {...block} />}
