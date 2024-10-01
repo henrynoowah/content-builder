@@ -4,8 +4,9 @@ import { convertStylesStringToObject } from "../../../lib";
 import { lazy } from "react";
 import { Block } from "@src/types";
 
+const Carousel = lazy(() => import("@src/components/carousel"));
+
 const TiptapEditor = lazy(() => import("../tiptap/tiptap"));
-const Carousel = lazy(() => import("../carousel"));
 
 const BlockEditor = ({
   block,

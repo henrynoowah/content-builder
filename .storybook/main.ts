@@ -1,4 +1,5 @@
 import type { StorybookConfig } from "@storybook/react-webpack5";
+import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -49,5 +50,11 @@ const config: StorybookConfig = {
       },
     },
   }),
+  webpackFinal: async (config, { configType }) => {
+    if (config && config.resolve) {
+      config.resolve.plugins = [new TsconfigPathsPlugin()];
+    }
+    return config;
+  },
 };
 export default config;

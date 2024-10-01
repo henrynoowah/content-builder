@@ -2,12 +2,7 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   // Entry point of the library
-  entry: {
-    index: "src/index.ts",
-    ["content-builder"]: "src/components/content-builder/index.ts",
-  },
-  // entry: ["src/**/index.ts"],
-  format: ["cjs", "esm"],
+  entry: ["src/index.ts"],
   // Generate TypeScript declaration files
   dts: true,
   // Clean the output directory before building

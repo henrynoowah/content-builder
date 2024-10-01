@@ -1,6 +1,6 @@
 {
   "name": "@noowah/content-builder",
-  "version": "0.0.5-beta.24",
+  "version": "0.0.5-beta.26",
   "description": "",
   "license": "MIT",
   "scripts": {
@@ -11,7 +11,10 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
-  "files": [ "dist" , "README.md" ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",
     "@storybook/addon-essentials": "^8.3.4",
@@ -34,6 +37,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "storybook": "^8.3.4",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
     "tslib": "^2.7.0",
     "tsup": "^8.3.0",
     "typescript": "^5.5.4"

@@ -7,19 +7,19 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
+  arraySwap,
   rectSwappingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
+import { Page, Section } from "@src/types";
+import { lazy } from "react";
 import {
   FormProvider,
   useFieldArray,
   useForm,
   useFormContext,
 } from "react-hook-form";
-import { lazy } from "react";
 import { convertStylesStringToObject } from "../../lib";
-import { Page, Section } from "@src/types";
 
 interface Params {
   data?: Page;
@@ -126,7 +126,7 @@ const SectionEditor = ({
 
         setValue(
           `sections.${index}.blocks`,
-          arrayMove(blocks, originalPos, newPos)
+          arraySwap(blocks, originalPos, newPos)
         );
       }}
     >
@@ -134,7 +134,7 @@ const SectionEditor = ({
         <SortableContext items={blocks} strategy={rectSwappingStrategy}>
           {blocks?.map((block, i) => (
             <BlockEditor
-              key={`block-container-${block.id}-${i}`}
+              key={`block-container-${block.id}`}
               block={block}
               onChange={(block) => update(i, block)}
             />

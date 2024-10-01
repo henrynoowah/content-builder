@@ -11,8 +11,12 @@ const Carousel = ({ images }: Block) => {
       style={{ overflow: "hidden" }}
     >
       <div
-        className="embla__container nwcb-w-full nwcb-h-full"
-        style={{ display: "flex" }}
+        className="embla__container"
+        style={{
+          width: "100%:",
+          height: "100%",
+          display: "flex",
+        }}
       >
         {images.map((image, i) => (
           <div
