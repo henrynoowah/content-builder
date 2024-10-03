@@ -1,2 +1,2 @@
-export { default as Editor } from "./content-builder";
-export { default as Renderer } from "./content-renderer";
+export { default as Editor } from "./editor";
+export { default as Renderer } from "./renderer";

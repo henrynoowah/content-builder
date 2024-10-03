@@ -1,5 +1,6 @@
-import "../src/global.css";
 import type { Preview } from "@storybook/react";
+import { withThemeByDataAttribute } from "@storybook/addon-themes";
+import "../src/styles/tailwind.css";
 
 const preview: Preview = {
   parameters: {
@@ -11,5 +12,18 @@ const preview: Preview = {
     },
   },
 };
+
+/* snipped for brevity */
+
+export const decorators = [
+  withThemeByDataAttribute({
+    themes: {
+      light: "light",
+      dark: "dark",
+    },
+    defaultTheme: "light",
+    attributeName: "data-mode",
+  }),
+];
 
 export default preview;

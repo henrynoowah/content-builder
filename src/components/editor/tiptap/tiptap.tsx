@@ -32,7 +32,6 @@ const TiptapEditor = ({
     editorProps: {
       attributes: {
         class: `focus:nwcb-outline-none nwcb-cursor-text`,
-        // class: `focus:outline-none cursor-text`,
       },
     },
     extensions: [

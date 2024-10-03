@@ -5,8 +5,11 @@
   "license": "MIT",
   "scripts": {
     "build": "tsup",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook": "concurrently 'yarn:watch:*'",
+    "watch:storybook": "storybook dev -p 6006",
+    "watch:tailwind": "npx tailwind -i ./src/global.css -o ./src/styles/tailwind.css --watch",
+    "build:tailwind": "npx tailwind -i ./src/global.css -o ./src/styles/tailwind.css",
+    "build-storybook":  "yarn build:storybook && storybook build"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -31,6 +34,7 @@
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.4",
     "babel-jest": "^29.7.0",
+    "concurrently": "^9.0.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.4.41",
@@ -65,6 +69,7 @@
     "autoprefixer": "^10.4.20",
     "embla-carousel-react": "^8.3.0",
     "react-hook-form": "7.53.0",
-    "tailwindcss": "^3.4.13"
+    "tailwindcss": "^3.4.13",
+    "zustand": "^5.0.0-rc.2"
   }
 }
