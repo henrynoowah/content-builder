@@ -11,19 +11,21 @@ import {
   rectSwappingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
-import { Page, Section } from "@src/types";
-import { lazy } from "react";
+import { Block, Page, Section } from "@src/types";
+import { forwardRef, lazy } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 const BlockEditor = lazy(() => import("../block-editor"));
 
-const SectionEditor = ({
-  section,
-  index,
-}: {
-  section: Section;
-  index: number;
-}) => {
+const SectionEditor = forwardRef<
+  HTMLDivElement,
+  {
+    onSectionSelect: (section: Section) => void;
+    onBlockSelect: (block: Block) => void;
+    section: Section;
+    index: number;
+  }
+>(({ onSectionSelect, onBlockSelect, section, index }, ref) => {
   const { control, setValue } = useFormContext<Page>();
   const { fields: blocks, update } = useFieldArray({
     control,
@@ -60,11 +62,18 @@ const SectionEditor = ({
         );
       }}
     >
-      <section id={section.id}>
+      <section
+        id={section.id}
+        ref={ref}
+        onClick={() => {
+          onSectionSelect(section);
+        }}
+      >
         <SortableContext items={blocks} strategy={rectSwappingStrategy}>
           {blocks?.map((block, i) => (
             <BlockEditor
-              key={`block-container-${block.id}`}
+              onBlockSelect={onBlockSelect}
+              key={`block-container-${block.id}-${JSON.stringify(block.style)}`}
               block={block}
               onChange={(block) => update(i, block)}
             />
@@ -73,6 +82,6 @@ const SectionEditor = ({
       </section>
     </DndContext>
   );
-};
+});
 
 export default SectionEditor;

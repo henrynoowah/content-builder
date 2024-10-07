@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Editor from "./Editor";
+import { convertJSONToCSS, convertStylesStringToObject } from "@src/lib";
+import { CSSProperties } from "react";
 
 // Explicitly typing meta as Meta<typeof Editor>
 const meta: Meta<typeof Editor> = {
@@ -16,6 +18,60 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    children: ({ section, updateSection, block, updateBlock }) => (
+      <div className="nwcb-fixed nwcb-top-0 nwcb-end-0 nwcb-w-80 nwcb-h-full nwcb-bg-slate-400">
+        <div className=" nwcb-flex nwcb-flex-col nwcb-gap-4">
+          <button
+            onClick={() => {
+              const style = `background-color: red; ${section?.style}`;
+              if (section) {
+                updateSection?.({
+                  ...section,
+                  style,
+                });
+              }
+            }}
+          >
+            {section?.id}
+          </button>
+          <div className="nwcb-flex">
+            <p>Padding</p>
+            <input
+              type="number"
+              onChange={(e) => {
+                if (!section) return;
+                let style = convertStylesStringToObject(
+                  section?.style ?? ""
+                ) as CSSProperties;
+
+                style.padding = `${e.target.value}px`;
+
+                updateSection?.({
+                  ...section,
+                  style: convertJSONToCSS(style as any),
+                });
+              }}
+            />
+          </div>
+        </div>
+
+        <div>Block: {block?.id}</div>
+
+        <button
+          onClick={() => {
+            const style = `padding: 24px; background-color: red; ${block?.style}`;
+            if (block) {
+              updateBlock?.({
+                ...block,
+                style,
+              });
+            }
+          }}
+        >
+          {block?.id}
+        </button>
+      </div>
+    ),
     onChange: () => {},
     onSubmit: () => {},
     data: {
@@ -43,6 +99,7 @@ export const Default: Story = {
               content:
                 "<h1>Heading1</h1><br><h2>Heading2</h2><br><h3>Heading3</h3><br><h4>Heading4</h4><br><h5>Heading5</h5><br><h6>Heading6</h6>",
               images: [],
+              style: "",
             },
           ],
         },
@@ -50,9 +107,9 @@ export const Default: Story = {
           id: "section-2",
           order: 1,
           style:
-            "display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;",
+            "display:grid; grid-template-columns: repeat(2, minmax(0, 1fr));",
           style_mobile:
-            "display:grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 16px;",
+            "display:grid; grid-template-columns: repeat(1, minmax(0, 1fr));",
           blocks: [
             {
               type: "image",
