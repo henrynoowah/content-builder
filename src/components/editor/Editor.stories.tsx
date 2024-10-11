@@ -6,7 +6,11 @@ import { CSSProperties } from "react";
 // Explicitly typing meta as Meta<typeof Editor>
 const meta: Meta<typeof Editor> = {
   title: "UI/Editor",
-  component: Editor,
+  component: (props) => (
+    <div className="nwcb-flex nwcb-justify-center">
+      <Editor {...props} />,
+    </div>
+  ),
   tags: ["autodocs"],
   parameters: { layout: "full" },
   // parameters: { layout: "centered" },
@@ -91,7 +95,7 @@ export const Default: Story = {
         {
           id: "section-1",
           order: 1,
-          style: "width: 100%;",
+          style: "width: 100%; padding: 24px;",
           blocks: [
             {
               type: "html",

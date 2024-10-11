@@ -130,12 +130,22 @@
   height: 100%;
 }
 
+.nwcb-h-fit {
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
 .nwcb-w-80 {
   width: 20rem;
 }
 
 .nwcb-w-full {
   width: 100%;
+}
+
+.nwcb-w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 .nwcb-cursor-pointer {
@@ -148,6 +158,10 @@
 
 .nwcb-flex-col {
   flex-direction: column;
+}
+
+.nwcb-justify-center {
+  justify-content: center;
 }
 
 .nwcb-gap-4 {

@@ -2,6 +2,20 @@ import type { Block, Page, Section } from "@src/types";
 import { lazy, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { convertStylesStringToObject } from "../../lib";
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+} from "@dnd-kit/sortable";
+import {
+  closestCorners,
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  UniqueIdentifier,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 
 const SectionEditor = lazy(() => import("./section-editor"));
 
@@ -26,11 +40,11 @@ interface EditorProps {
 }
 
 const Editor = ({ data, onSubmit, children }: EditorProps) => {
-  const methods = useForm<Page>({
+  const methods = useForm<Page & { selectedSection?: Section }>({
     values: data,
   });
 
-  const { handleSubmit, control } = methods;
+  const { handleSubmit, control, setValue, watch } = methods;
 
   const { fields: sections, update: updateSection } = useFieldArray({
     control,
@@ -45,35 +59,38 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
   const containerName = "content-container";
 
   const [selectedBlock, setSelectedBlock] = useState<Block>();
-  const [selectedSection, setSelectedSection] = useState<Section | undefined>(
-    undefined
-  );
 
   const updateSectionHandler = (section: Section) => {
     const sectionIndex = sections.findIndex((x) => x.id === section.id);
     updateSection(sectionIndex, section);
   };
 
-  const updateBlockHandler = (block: Block) => {
-    if (selectedSection) {
-      const sectionIndex = sections.findIndex(
-        (x) => x.id === selectedSection.id
-      );
-      const section = sections.find((x) => x.id === selectedSection.id);
-      let newBlocks = section?.blocks ?? [];
+  // const updateBlockHandler = (block: Block) => {
+  //   if (selectedSection) {
+  //     const sectionIndex = sections.findIndex(
+  //       (x) => x.id === selectedSection.id
+  //     );
+  //     const section = sections.find((x) => x.id === selectedSection.id);
+  //     let newBlocks = section?.blocks ?? [];
 
-      if (selectedBlock) {
-        const blockIndex = newBlocks?.findIndex(
-          (x) => x.id === selectedBlock?.id
-        );
-        newBlocks[blockIndex] = block;
+  //     if (selectedBlock) {
+  //       const blockIndex = newBlocks?.findIndex(
+  //         (x) => x.id === selectedBlock?.id
+  //       );
+  //       newBlocks[blockIndex] = block;
 
-        if (section) {
-          updateSection(sectionIndex, { ...section, blocks: newBlocks });
-        }
-      }
-    }
-  };
+  //       if (section) {
+  //         updateSection(sectionIndex, { ...section, blocks: newBlocks });
+  //       }
+  //     }
+  //   }
+  // };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 250 },
+    })
+  );
 
   return (
     <FormProvider {...methods}>
@@ -84,8 +101,25 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
         }}
         onSubmit={handleSubmit(onSubmitHandler, (err) => console.error(err))}
       >
-        {sections.map((section, sectionIndex) => {
-          const css = `
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragEnd={({ active, over }) => {
+            if (!over || active.id === over.id) return;
+
+            const getPosition = (id: UniqueIdentifier) =>
+              sections.findIndex((x) => x.id === id);
+
+            const originalPos = getPosition(active.id);
+
+            const newPos = getPosition(over.id);
+
+            setValue(`sections`, arrayMove(sections, originalPos, newPos));
+          }}
+        >
+          <SortableContext items={sections} strategy={rectSortingStrategy}>
+            {sections.map((section, sectionIndex) => {
+              const css = `
             #${section.id} {
               ${section.style}
             }
@@ -95,39 +129,43 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
               }
             }
           `;
-          return (
-            <div
-              key={`${section.id}-style`}
-              id={`section-${section.id}`}
-              style={{
-                containerType: "inline-size",
-                containerName: containerName,
-              }} // Apply container properties
-              className={
-                selectedSection?.id === section.id
-                  ? "nwcb-ring-2 nwcb-ring-inset nwcb-ring-blue-400"
-                  : ""
-              }
-            >
-              <style>{css}</style>
-              <SectionEditor
-                key={`${section.id}`}
-                // key={`${section.id}-${JSON.stringify(section.blocks)}`}
-                section={section}
-                index={sectionIndex}
-                onSectionSelect={setSelectedSection}
-                onBlockSelect={setSelectedBlock}
-              />
-            </div>
-          );
-        })}
+              return (
+                <div
+                  key={`${section.id}-style`}
+                  id={`section-${section.id}`}
+                  style={{
+                    containerType: "inline-size",
+                    containerName: containerName,
+                  }} // Apply container properties
+                  // className={
+                  //   selectedSection?.id === section.id
+                  //     ? "nwcb-ring-2 nwcb-ring-inset nwcb-ring-blue-400"
+                  //     : ""
+                  // }
+                >
+                  <style>{css}</style>
+                  <SectionEditor
+                    key={`${section.id}`}
+                    // key={`${section.id}-${JSON.stringify(section.blocks)}`}
+                    section={section}
+                    index={sectionIndex}
+                    onSectionSelect={(section) =>
+                      setValue("selectedSection", section)
+                    }
+                    onBlockSelect={setSelectedBlock}
+                  />
+                </div>
+              );
+            })}
+          </SortableContext>
+        </DndContext>
       </form>
 
       {children?.({
-        section: selectedSection,
+        section: watch("selectedSection"),
         block: selectedBlock,
         updateSection: updateSectionHandler, // Pass updateSection method
-        updateBlock: updateBlockHandler,
+        // updateBlock: updateBlockHandler,
       })}
     </FormProvider>
   );
