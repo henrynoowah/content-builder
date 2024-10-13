@@ -1,21 +1,20 @@
-import type { Block, Page, Section } from "@src/types";
-import { lazy, useState } from "react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import { convertStylesStringToObject } from "../../lib";
-import {
-  arrayMove,
-  rectSortingStrategy,
-  SortableContext,
-} from "@dnd-kit/sortable";
 import {
   closestCorners,
   DndContext,
-  DragOverlay,
   PointerSensor,
   UniqueIdentifier,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+} from "@dnd-kit/sortable";
+import type { Block, Page, Section, SectionEditor } from "@src/types";
+import { lazy, useRef, useState } from "react";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { convertStylesStringToObject } from "../../lib";
 
 const SectionEditor = lazy(() => import("./section-editor"));
 
@@ -40,11 +39,11 @@ interface EditorProps {
 }
 
 const Editor = ({ data, onSubmit, children }: EditorProps) => {
-  const methods = useForm<Page & { selectedSection?: Section }>({
+  const methods = useForm<Page>({
     values: data,
   });
 
-  const { handleSubmit, control, setValue, watch } = methods;
+  const { handleSubmit, control, setValue } = methods;
 
   const { fields: sections, update: updateSection } = useFieldArray({
     control,
@@ -58,6 +57,7 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
 
   const containerName = "content-container";
 
+  const [selectedSection, setSelectedSection] = useState<Section>();
   const [selectedBlock, setSelectedBlock] = useState<Block>();
 
   const updateSectionHandler = (section: Section) => {
@@ -65,32 +65,24 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
     updateSection(sectionIndex, section);
   };
 
-  // const updateBlockHandler = (block: Block) => {
-  //   if (selectedSection) {
-  //     const sectionIndex = sections.findIndex(
-  //       (x) => x.id === selectedSection.id
-  //     );
-  //     const section = sections.find((x) => x.id === selectedSection.id);
-  //     let newBlocks = section?.blocks ?? [];
-
-  //     if (selectedBlock) {
-  //       const blockIndex = newBlocks?.findIndex(
-  //         (x) => x.id === selectedBlock?.id
-  //       );
-  //       newBlocks[blockIndex] = block;
-
-  //       if (section) {
-  //         updateSection(sectionIndex, { ...section, blocks: newBlocks });
-  //       }
-  //     }
-  //   }
-  // };
+  const updateBlockHandler = (block: Block) => {
+    if (selectedSectionRef.current && selectedSection) {
+      if (selectedBlock) {
+        const blockIndex = selectedSection.blocks?.findIndex(
+          (x) => x.id === block?.id
+        );
+        selectedSectionRef.current.updateBlock(blockIndex, block);
+      }
+    }
+  };
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 250 },
     })
   );
+
+  const selectedSectionRef = useRef<SectionEditor>(null);
 
   return (
     <FormProvider {...methods}>
@@ -118,7 +110,7 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
           }}
         >
           <SortableContext items={sections} strategy={rectSortingStrategy}>
-            {sections.map((section, sectionIndex) => {
+            {sections.map((section, i) => {
               const css = `
             #${section.id} {
               ${section.style}
@@ -145,13 +137,19 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
                 >
                   <style>{css}</style>
                   <SectionEditor
+                    ref={
+                      i ===
+                      sections.findIndex(
+                        (section) => section.id === selectedSection?.id
+                      )
+                        ? selectedSectionRef
+                        : undefined
+                    }
                     key={`${section.id}`}
                     // key={`${section.id}-${JSON.stringify(section.blocks)}`}
                     section={section}
-                    index={sectionIndex}
-                    onSectionSelect={(section) =>
-                      setValue("selectedSection", section)
-                    }
+                    index={i}
+                    onSectionSelect={setSelectedSection}
                     onBlockSelect={setSelectedBlock}
                   />
                 </div>
@@ -162,10 +160,10 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
       </form>
 
       {children?.({
-        section: watch("selectedSection"),
+        section: selectedSection,
         block: selectedBlock,
         updateSection: updateSectionHandler, // Pass updateSection method
-        // updateBlock: updateBlockHandler,
+        updateBlock: updateBlockHandler,
       })}
     </FormProvider>
   );

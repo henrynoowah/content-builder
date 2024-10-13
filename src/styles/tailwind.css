@@ -126,13 +126,13 @@
   display: flex;
 }
 
-.nwcb-h-full {
-  height: 100%;
-}
-
 .nwcb-h-fit {
   height: -moz-fit-content;
   height: fit-content;
+}
+
+.nwcb-h-full {
+  height: 100%;
 }
 
 .nwcb-w-80 {
@@ -141,11 +141,6 @@
 
 .nwcb-w-full {
   width: 100%;
-}
-
-.nwcb-w-fit {
-  width: -moz-fit-content;
-  width: fit-content;
 }
 
 .nwcb-cursor-pointer {

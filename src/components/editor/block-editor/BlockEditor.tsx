@@ -42,7 +42,6 @@ const BlockEditor = forwardRef<Block, BlockProps>(
         {...attributes}
         {...listeners}
       >
-        {block.style}
         {block.type === "html" && (
           <TiptapEditor
             key={`section-block-container-${block.id}`}

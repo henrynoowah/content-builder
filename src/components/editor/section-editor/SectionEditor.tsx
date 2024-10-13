@@ -16,19 +16,20 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Block, Page, Section } from "@src/types";
-import { forwardRef, lazy, useState } from "react";
+import { Block, Page, Section, SectionEditor } from "@src/types";
+import { forwardRef, lazy, useImperativeHandle, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 const BlockEditor = lazy(() => import("../block-editor"));
 
-interface EditorProps {
+interface SectionEditorProps {
   onSectionSelect: (section: Section) => void;
   onBlockSelect: (block: Block) => void;
   section: Section;
   index: number;
 }
-const SectionEditor = forwardRef<Section, EditorProps>(
+
+const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
   ({ onSectionSelect, onBlockSelect, section, index }, ref) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({
@@ -56,7 +57,8 @@ const SectionEditor = forwardRef<Section, EditorProps>(
       // useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
     );
 
-    const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+    const [_, setActiveId] = useState<UniqueIdentifier | null>(null);
+    const [selected, setSelected] = useState<Block | null>(null);
 
     const onDragStart = ({ active }: DragStartEvent) => {
       setActiveId(active.id);
@@ -74,11 +76,23 @@ const SectionEditor = forwardRef<Section, EditorProps>(
 
       setValue(
         `sections.${index}.blocks`,
-        arraySwap(blocks, originalPos, newPos)
+        arraySwap(blocks, originalPos, newPos).map((block, i) => ({
+          ...block,
+          order: i + 1,
+        }))
       );
 
       setActiveId(null);
     };
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        selectedBlock: selected,
+        updateBlock: (i: number, block: Block) => update(i, block),
+      }),
+      [selected]
+    );
 
     return (
       <section
@@ -87,7 +101,7 @@ const SectionEditor = forwardRef<Section, EditorProps>(
         onClick={() => {
           onSectionSelect(section);
         }}
-        className=" nwcb-h-fit"
+        className="nwcb-h-fit"
         style={{
           ...style,
         }}
@@ -103,7 +117,10 @@ const SectionEditor = forwardRef<Section, EditorProps>(
           <SortableContext items={blocks} strategy={rectSwappingStrategy}>
             {blocks?.map((block, i) => (
               <BlockEditor
-                onBlockSelect={onBlockSelect}
+                onBlockSelect={(block) => {
+                  onBlockSelect(block);
+                  setSelected(block);
+                }}
                 key={`block-container-${block.id}-${JSON.stringify(
                   block.style
                 )}`}
@@ -113,7 +130,7 @@ const SectionEditor = forwardRef<Section, EditorProps>(
             ))}
           </SortableContext>
 
-          <DragOverlay>
+          {/* <DragOverlay>
             {activeId ? (
               <BlockEditor
                 block={blocks.find((x) => x.id === activeId) as Block}
@@ -121,7 +138,7 @@ const SectionEditor = forwardRef<Section, EditorProps>(
                 onBlockSelect={() => {}}
               />
             ) : null}
-          </DragOverlay>
+          </DragOverlay> */}
         </DndContext>
       </section>
     );

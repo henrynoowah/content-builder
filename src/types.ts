@@ -22,6 +22,11 @@ type Section = {
   blocks: Block[];
 };
 
+type SectionEditor = {
+  selectedBlock: Block | null;
+  updateBlock: (i: number, block: Block) => void;
+};
+
 type Block = {
   id: string;
   type: "html" | "image" | "gallery";
@@ -40,4 +45,4 @@ type Block = {
   content?: string;
 };
 
-export type { Page, Section, Block };
+export type { Page, Section, SectionEditor, Block };
