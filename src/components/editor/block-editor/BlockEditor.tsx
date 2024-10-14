@@ -1,7 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Block } from "@src/types";
-import { forwardRef, lazy } from "react";
+import { forwardRef, lazy, useImperativeHandle } from "react";
 import { convertStylesStringToObject } from "../../../lib";
 import { ImageBlock } from "./blocks";
 const Carousel = lazy(() => import("@src/components/carousel"));
@@ -11,11 +11,11 @@ const TiptapEditor = lazy(() => import("../tiptap/tiptap"));
 interface BlockProps {
   block: Block;
   onChange: (block: Block) => void;
-  onBlockSelect: (block: Block) => void;
+  onSelect: (block: Block) => void;
 }
 
 const BlockEditor = forwardRef<Block, BlockProps>(
-  ({ block, onChange, onBlockSelect }, ref) => {
+  ({ block, onChange, onSelect }, ref) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({
         id: block.id,
@@ -25,6 +25,8 @@ const BlockEditor = forwardRef<Block, BlockProps>(
       transition,
       transform: CSS.Transform.toString(transform),
     };
+
+    useImperativeHandle(ref, () => block);
 
     return (
       <div
@@ -36,7 +38,7 @@ const BlockEditor = forwardRef<Block, BlockProps>(
         }}
         onClick={() => {
           // TODO - Set Block Context
-          onBlockSelect(block);
+          onSelect(block);
         }}
         className="nwcb-relative group/block nwcb-ring-[1px] nwcb-ring-transparent hover:nwcb-ring-blue-400/60 nwcb-ring-inset nwcb-cursor-pointer"
         {...attributes}

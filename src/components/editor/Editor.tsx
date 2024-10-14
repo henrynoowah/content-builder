@@ -1,6 +1,7 @@
 import {
   closestCorners,
   DndContext,
+  DragEndEvent,
   PointerSensor,
   UniqueIdentifier,
   useSensor,
@@ -68,9 +69,12 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
   const updateBlockHandler = (block: Block) => {
     if (selectedSectionRef.current && selectedSection) {
       if (selectedBlock) {
-        const blockIndex = selectedSection.blocks?.findIndex(
-          (x) => x.id === block?.id
-        );
+        const blockIndex =
+          selectedSectionRef.current?.section.blocks?.findIndex(
+            (x) => x.id === selectedBlock?.id
+          ) ?? 0;
+
+        console.log(selectedSection, blockIndex);
         selectedSectionRef.current.updateBlock(blockIndex, block);
       }
     }
@@ -84,6 +88,19 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
 
   const selectedSectionRef = useRef<SectionEditor>(null);
 
+  const onDrageEnd = ({ active, over }: DragEndEvent) => {
+    if (!over || active.id === over.id) return;
+
+    const getPosition = (id: UniqueIdentifier) =>
+      sections.findIndex((x) => x.id === id);
+
+    const originalPos = getPosition(active.id);
+
+    const newPos = getPosition(over.id);
+
+    setValue(`sections`, arrayMove(sections, originalPos, newPos));
+  };
+
   return (
     <FormProvider {...methods}>
       <form
@@ -96,18 +113,7 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
-          onDragEnd={({ active, over }) => {
-            if (!over || active.id === over.id) return;
-
-            const getPosition = (id: UniqueIdentifier) =>
-              sections.findIndex((x) => x.id === id);
-
-            const originalPos = getPosition(active.id);
-
-            const newPos = getPosition(over.id);
-
-            setValue(`sections`, arrayMove(sections, originalPos, newPos));
-          }}
+          onDragEnd={onDrageEnd}
         >
           <SortableContext items={sections} strategy={rectSortingStrategy}>
             {sections.map((section, i) => {
@@ -123,17 +129,18 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
           `;
               return (
                 <div
-                  key={`${section.id}-style`}
+                  key={`${section.id}`}
                   id={`section-${section.id}`}
                   style={{
                     containerType: "inline-size",
                     containerName: containerName,
-                  }} // Apply container properties
-                  // className={
-                  //   selectedSection?.id === section.id
-                  //     ? "nwcb-ring-2 nwcb-ring-inset nwcb-ring-blue-400"
-                  //     : ""
-                  // }
+                  }}
+                  // ? Apply container properties
+                  className={
+                    selectedSection?.id === section.id
+                      ? "nwcb-ring-2 nwcb-ring-inset nwcb-ring-blue-400"
+                      : ""
+                  }
                 >
                   <style>{css}</style>
                   <SectionEditor
@@ -146,7 +153,6 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
                         : undefined
                     }
                     key={`${section.id}`}
-                    // key={`${section.id}-${JSON.stringify(section.blocks)}`}
                     section={section}
                     index={i}
                     onSectionSelect={setSelectedSection}

@@ -1,3 +1,11 @@
+interface EditorContextProps {
+  section?: Section;
+  block?: Block;
+  sections?: Section[];
+  updateSection?: (section: Section) => void;
+  updateBlock?: (block: Block) => void;
+}
+
 type Page = {
   id: string;
   title: string;
@@ -23,6 +31,7 @@ type Section = {
 };
 
 type SectionEditor = {
+  section: Section;
   selectedBlock: Block | null;
   updateBlock: (i: number, block: Block) => void;
 };
@@ -45,4 +54,4 @@ type Block = {
   content?: string;
 };
 
-export type { Page, Section, SectionEditor, Block };
+export type { EditorContextProps, Page, Section, SectionEditor, Block };

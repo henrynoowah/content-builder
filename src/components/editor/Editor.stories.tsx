@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Editor from "./Editor";
-import { convertJSONToCSS, convertStylesStringToObject } from "@src/lib";
-import { CSSProperties } from "react";
+import SettingsTab from "./settings-tab";
 
 // Explicitly typing meta as Meta<typeof Editor>
 const meta: Meta<typeof Editor> = {
@@ -22,60 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: ({ section, updateSection, block, updateBlock }) => (
-      <div className="nwcb-fixed nwcb-top-0 nwcb-end-0 nwcb-w-80 nwcb-h-full nwcb-bg-slate-400">
-        <div className=" nwcb-flex nwcb-flex-col nwcb-gap-4">
-          <button
-            onClick={() => {
-              const style = `background-color: red; ${section?.style}`;
-              if (section) {
-                updateSection?.({
-                  ...section,
-                  style,
-                });
-              }
-            }}
-          >
-            {section?.id}
-          </button>
-          <div className="nwcb-flex">
-            <p>Padding</p>
-            <input
-              type="number"
-              onChange={(e) => {
-                if (!section) return;
-                let style = convertStylesStringToObject(
-                  section?.style ?? ""
-                ) as CSSProperties;
-
-                style.padding = `${e.target.value}px`;
-
-                updateSection?.({
-                  ...section,
-                  style: convertJSONToCSS(style as any),
-                });
-              }}
-            />
-          </div>
-        </div>
-
-        <div>Block: {block?.id}</div>
-
-        <button
-          onClick={() => {
-            const style = `padding: 24px; background-color: red; ${block?.style}`;
-            if (block) {
-              updateBlock?.({
-                ...block,
-                style,
-              });
-            }
-          }}
-        >
-          {block?.id}
-        </button>
-      </div>
-    ),
+    children: (props) => <SettingsTab {...props} />,
     onChange: () => {},
     onSubmit: () => {},
     data: {
@@ -99,7 +45,7 @@ export const Default: Story = {
           blocks: [
             {
               type: "html",
-              id: "block_1",
+              id: "block-1",
               content:
                 "<h1>Heading1</h1><br><h2>Heading2</h2><br><h3>Heading3</h3><br><h4>Heading4</h4><br><h5>Heading5</h5><br><h6>Heading6</h6>",
               images: [],
@@ -116,9 +62,9 @@ export const Default: Story = {
             "display:grid; grid-template-columns: repeat(1, minmax(0, 1fr));",
           blocks: [
             {
-              type: "image",
               id: "block-1",
-              style: "",
+              type: "image",
+              style: "padding: 16px;",
               src: "https://velog.velcdn.com/images/henrynoowah/post/cb5c90fb-81d9-492d-b6dc-9cbb3af6ab2a/image.png",
               alt: "Our Team",
               caption: "Meet Our Team",
@@ -150,7 +96,7 @@ export const Default: Story = {
               images: [],
             },
             {
-              id: "block-6",
+              id: "block-5",
               style: "padding: 16px;",
               type: "html",
               content:
@@ -158,7 +104,7 @@ export const Default: Story = {
               images: [],
             },
             {
-              id: "block-5",
+              id: "block-6",
               type: "html",
               style: "padding: 16px;",
               content:
@@ -194,7 +140,7 @@ export const Default: Story = {
             },
             {
               type: "html",
-              id: "block_1",
+              id: "block-1",
               style: "",
               content:
                 "<p>Welcome to our company. We are dedicated to providing the best services...</p>",

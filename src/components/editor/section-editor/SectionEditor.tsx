@@ -2,7 +2,6 @@ import {
   closestCorners,
   DndContext,
   DragEndEvent,
-  DragOverlay,
   DragStartEvent,
   PointerSensor,
   UniqueIdentifier,
@@ -24,7 +23,7 @@ const BlockEditor = lazy(() => import("../block-editor"));
 
 interface SectionEditorProps {
   onSectionSelect: (section: Section) => void;
-  onBlockSelect: (block: Block) => void;
+  onBlockSelect: (block?: Block) => void;
   section: Section;
   index: number;
 }
@@ -41,8 +40,12 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
       transform: CSS.Transform.toString(transform),
     };
 
-    const { control, setValue } = useFormContext<Page>();
-    const { fields: blocks, update } = useFieldArray({
+    const { control, watch } = useFormContext<Page>();
+    const {
+      fields: blocks,
+      update,
+      replace,
+    } = useFieldArray({
       control,
       name: `sections.${index}.blocks`,
       keyName: "keyId",
@@ -62,6 +65,7 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
 
     const onDragStart = ({ active }: DragStartEvent) => {
       setActiveId(active.id);
+      setSelected(active.data.current as Block);
     };
 
     const onDragEnd = ({ active, over }: DragEndEvent) => {
@@ -74,31 +78,37 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
 
       const newPos = getPosition(over.id);
 
-      setValue(
-        `sections.${index}.blocks`,
-        arraySwap(blocks, originalPos, newPos).map((block, i) => ({
-          ...block,
-          order: i + 1,
-        }))
-      );
+      const newArr = arraySwap(blocks, originalPos, newPos).map((block, i) => ({
+        ...block,
+        order: i + 1,
+      }));
+
+      // replace(newArr);
+
+      replace(newArr);
 
       setActiveId(null);
+      setSelected(active.data.current as Block);
     };
 
     useImperativeHandle(
       ref,
       () => ({
+        section: watch(`sections.${index}`),
         selectedBlock: selected,
         updateBlock: (i: number, block: Block) => update(i, block),
       }),
-      [selected]
+      [selected, watch(`sections.${index}`)]
     );
 
     return (
       <section
         ref={setNodeRef}
         id={section.id}
-        onClick={() => {
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            onBlockSelect(undefined);
+          }
           onSectionSelect(section);
         }}
         className="nwcb-h-fit"
@@ -117,13 +127,11 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
           <SortableContext items={blocks} strategy={rectSwappingStrategy}>
             {blocks?.map((block, i) => (
               <BlockEditor
-                onBlockSelect={(block) => {
+                key={`block-container-${block.id}`}
+                onSelect={(block) => {
                   onBlockSelect(block);
                   setSelected(block);
                 }}
-                key={`block-container-${block.id}-${JSON.stringify(
-                  block.style
-                )}`}
                 block={block}
                 onChange={(block) => update(i, block)}
               />
