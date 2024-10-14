@@ -1,3 +1,5 @@
+import { CSSProperties } from "react";
+
 interface EditorContextProps {
   section?: Section;
   block?: Block;
@@ -10,7 +12,7 @@ type Page = {
   id: string;
   title: string;
   slug: string;
-  style: string;
+  style: Partial<CSSProperties>;
   sections: Section[];
   created_at: string;
   updated_at: string;
@@ -25,8 +27,8 @@ type Page = {
 type Section = {
   id: string;
   order?: number;
-  style?: string;
-  style_mobile?: string;
+  style?: Partial<CSSProperties>;
+  style_mobile?: Partial<CSSProperties>;
   blocks: Block[];
 };
 
@@ -39,8 +41,7 @@ type SectionEditor = {
 type Block = {
   id: string;
   type: "html" | "image" | "gallery";
-  style?: string;
-
+  style?: Partial<CSSProperties>;
   // ? image / gallery
   src?: string;
   alt?: string;

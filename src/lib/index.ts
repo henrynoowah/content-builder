@@ -1,3 +1,5 @@
+import { CSSProperties } from "react";
+
 export const convertStylesStringToObject = (stringStyles: string) =>
   typeof stringStyles === "string"
     ? stringStyles.split(";").reduce((acc, style) => {
@@ -18,7 +20,8 @@ export const convertStylesStringToObject = (stringStyles: string) =>
       }, {})
     : {};
 
-export const convertJSONToCSS = (cssObject: Record<string, string>): string => {
+export const convertJSONToCSS = (cssObject?: CSSProperties): string => {
+  if (!cssObject) return "";
   const cssString = Object.entries(cssObject)
     .map(([key, value]) => {
       // Convert camelCase to kebab-case

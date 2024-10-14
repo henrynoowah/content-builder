@@ -1,4 +1,3 @@
-import { convertJSONToCSS, convertStylesStringToObject } from "@src/lib";
 import { Block, EditorContextProps } from "@src/types";
 import { CSSProperties } from "react";
 
@@ -16,7 +15,20 @@ const SettingsTab = ({
         }`}</p>
         <button
           onClick={() => {
-            const style = `gap: 16px; ${section?.style}`;
+            if (section) {
+              updateSection?.({
+                ...section,
+                style: { ...section.style, gap: "16px" },
+              });
+            }
+          }}
+        >
+          {section?.id}
+        </button>
+
+        <StyleEditor
+          style={section?.style}
+          onChange={(style) => {
             if (section) {
               updateSection?.({
                 ...section,
@@ -24,59 +36,62 @@ const SettingsTab = ({
               });
             }
           }}
-        >
-          {section?.id}
-        </button>
-        <div className="nwcb-flex">
-          <p>Padding</p>
-          <input
-            type="number"
-            onChange={(e) => {
-              if (!section) return;
-              let style = convertStylesStringToObject(
-                section?.style ?? ""
-              ) as CSSProperties;
-
-              style.padding = `${e.target.value}px`;
-
-              updateSection?.({
-                ...section,
-                style: convertJSONToCSS(style as any),
-              });
-            }}
-          />
-        </div>
+        />
       </div>
 
       <hr className="nwcb-my-3" />
 
       <div>Block: {block?.id}</div>
 
-      {block && <BlockSetting block={block} />}
-
       <button
         onClick={() => {
-          const style = `background-color: #5C9D60; border-radius: 24px; color: white; ${block?.style}`;
           if (block) {
             updateBlock?.({
               ...block,
-              style,
+              style: {
+                ...block.style,
+                backgroundColor: "#5C9D60",
+                borderRadius: "24px",
+                color: "white",
+              },
             });
           }
         }}
       >
         {block?.id}
       </button>
+
+      {block && (
+        <BlockSetting
+          block={block}
+          onChange={(block) => updateBlock?.(block)}
+        />
+      )}
     </div>
   );
 };
 
 export default SettingsTab;
 
-const BlockSetting = ({ block }: { block: Block }) => {
+const BlockSetting = ({
+  block,
+  onChange,
+}: {
+  block: Block;
+  onChange: (block: Block) => void;
+}) => {
   switch (block.type) {
     case "html":
-      return "HTMKL";
+      return (
+        <>
+          <StyleEditor
+            style={block.style}
+            onChange={(style) => {
+              onChange({ ...block, style });
+            }}
+          />
+        </>
+      );
     case "gallery":
       return "gallery";
     case "image":
@@ -93,6 +108,80 @@ const ImageSetting = ({ block }: { block: Block }) => {
         src={block.src}
         className="nwcb-w-full nwcb-h-fit nwcb-aspect-square"
       />
+    </div>
+  );
+};
+
+const StyleEditor = ({
+  style,
+  onChange,
+}: {
+  style?: CSSProperties;
+  onChange: (style: CSSProperties) => void;
+}) => {
+  return (
+    <div className="nwcb-flex nwcb-flex-col nwcb-gap-4">
+      <p>Layout</p>
+      <div>
+        <p>Width</p>
+        <input
+          type="number"
+          onChange={(e) => {
+            onChange?.({
+              ...style,
+              maxWidth: `${e.target.value}px`,
+            });
+          }}
+        />
+      </div>
+      <div>
+        <p>Minimum Height</p>
+        <input
+          type="number"
+          onChange={(e) => {
+            onChange?.({
+              ...style,
+              minHeight: `${e.target.value}px`,
+            });
+          }}
+        />
+      </div>
+      <div>
+        <p>Padding</p>
+        <input
+          type="number"
+          onChange={(e) => {
+            onChange?.({
+              ...style,
+              padding: `${e.target.value}px`,
+            });
+          }}
+        />
+      </div>
+      {/* <div>
+        <p>Padding</p>
+        <input
+          type="number"
+          onChange={(e) => {
+            onChange?.({
+              ...style,
+              padding: `${e.target.value}px`,
+            });
+          }}
+        />
+      </div>
+      <div>
+        <p>Border</p>
+        <input
+          type="text"
+          onChange={(e) => {
+            onChange?.({
+              ...style,
+              border: `${e.target.value}`,
+            });
+          }}
+        />
+      </div> */}
     </div>
   );
 };

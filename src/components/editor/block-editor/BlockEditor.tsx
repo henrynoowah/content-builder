@@ -2,7 +2,6 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Block } from "@src/types";
 import { forwardRef, lazy, useImperativeHandle } from "react";
-import { convertStylesStringToObject } from "../../../lib";
 import { ImageBlock } from "./blocks";
 const Carousel = lazy(() => import("@src/components/carousel"));
 
@@ -33,7 +32,7 @@ const BlockEditor = forwardRef<Block, BlockProps>(
         ref={setNodeRef}
         id={block.id}
         style={{
-          ...convertStylesStringToObject(block.style ?? ""),
+          ...block.style,
           ...style,
         }}
         onClick={() => {

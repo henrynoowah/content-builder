@@ -36,12 +36,19 @@ export const Default: Story = {
         description: "Learn more about our company, mission, and values.",
         keywords: ["company", "mission", "values"],
       },
-      style: "width: 1024px; max-width: 100%;",
+      // style: "width: 1024px; max-width: 100%;",
+      style: {
+        width: "1024px",
+        maxWidth: "100%",
+      },
       sections: [
         {
           id: "section-1",
           order: 1,
-          style: "width: 100%; padding: 24px;",
+          style: {
+            width: "100%",
+            padding: "24px",
+          },
           blocks: [
             {
               type: "html",
@@ -49,22 +56,29 @@ export const Default: Story = {
               content:
                 "<h1>Heading1</h1><br><h2>Heading2</h2><br><h3>Heading3</h3><br><h4>Heading4</h4><br><h5>Heading5</h5><br><h6>Heading6</h6>",
               images: [],
-              style: "",
+              style: {},
             },
           ],
         },
         {
           id: "section-2",
           order: 1,
-          style:
-            "display:grid; grid-template-columns: repeat(2, minmax(0, 1fr));",
-          style_mobile:
-            "display:grid; grid-template-columns: repeat(1, minmax(0, 1fr));",
+          style: {
+            display: "grid",
+            gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+          },
+          style_mobile: {
+            display: "grid",
+            gridTemplateColumns: "repeat(1, minmax(0, 1fr))",
+            gap: "16px",
+          },
           blocks: [
             {
               id: "block-1",
               type: "image",
-              style: "padding: 16px;",
+              style: {
+                padding: "16px",
+              },
               src: "https://velog.velcdn.com/images/henrynoowah/post/cb5c90fb-81d9-492d-b6dc-9cbb3af6ab2a/image.png",
               alt: "Our Team",
               caption: "Meet Our Team",
@@ -73,7 +87,9 @@ export const Default: Story = {
             {
               id: "block-2",
               type: "html",
-              style: "padding: 16px;",
+              style: {
+                padding: "16px",
+              },
               content:
                 "<p>I think I am getting used to the editor feature customization</p><p>Few things that I need to add for the test editor</p><br><p>I think I am getting used to the editor feature customization</p><p>Few things that I need to add for the test editor</p><br><p>I think I am getting used to the editor feature customization</p><p>Few things that I need to add for the test editor</p><br><br>",
               images: [],
@@ -81,7 +97,9 @@ export const Default: Story = {
             {
               id: "block-3",
               type: "html",
-              style: "padding: 16px;",
+              style: {
+                padding: "16px",
+              },
               content:
                 '<p>I think I am getting used to the editor feature customization</p><p>Few things that I need to add for the test editor</p><ul style="list-style: square;"><li style="margin: 0 0 0 1.25rem"><p>List item feature</p></li><li style="margin: 0 0 0 1.25rem"><p>Notion-like floating editor</p></li><li style="margin: 0 0 0 1.25rem"><p>Test</p></li><li style="margin: 0 0 0 1.25rem"><p>Test</p></li></ul><br>',
               images: [],
@@ -89,7 +107,9 @@ export const Default: Story = {
             {
               type: "image",
               id: "block-4",
-              style: "",
+              style: {
+                padding: "16px",
+              },
               src: "https://velog.velcdn.com/images/henrynoowah/post/7db404ca-3263-49ab-8566-9922d0a0b3e9/image.png",
               alt: "Our Team",
               caption: "Meet Our Team",
@@ -97,7 +117,9 @@ export const Default: Story = {
             },
             {
               id: "block-5",
-              style: "padding: 16px;",
+              style: {
+                padding: "16px",
+              },
               type: "html",
               content:
                 "<p>I have made a simple test page editor with a basic save feature for the content</p><p></p><p>Now I need to update the editor UI for more user-friendly experience</p><p></p><p>Also a mobile responsive configuration for grid layouts</p>",
@@ -106,7 +128,9 @@ export const Default: Story = {
             {
               id: "block-6",
               type: "html",
-              style: "padding: 16px;",
+              style: {
+                padding: "16px",
+              },
               content:
                 "<div><p>I have made a simple test page editor with a basic save feature for the content</p><p></p></div>",
               images: [],
@@ -116,15 +140,21 @@ export const Default: Story = {
         {
           id: "section-3",
           order: 1,
-          style:
-            "display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px",
-          style_mobile:
-            "display:grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 16px;",
+          style: {
+            display: "grid",
+            gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+            gap: "16px",
+          },
+          style_mobile: {
+            display: "grid",
+            gridTemplateColumns: "repeat(1, minmax(0, 1fr))",
+            gap: "16px",
+          },
           blocks: [
             {
               type: "gallery",
               id: "block-3",
-              style: "",
+              style: {},
               images: [
                 {
                   src: "https://velog.velcdn.com/images/henrynoowah/post/cb5c90fb-81d9-492d-b6dc-9cbb3af6ab2a/image.png",
@@ -141,7 +171,7 @@ export const Default: Story = {
             {
               type: "html",
               id: "block-1",
-              style: "",
+              style: {},
               content:
                 "<p>Welcome to our company. We are dedicated to providing the best services...</p>",
               images: [],

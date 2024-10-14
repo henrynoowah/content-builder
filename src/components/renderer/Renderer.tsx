@@ -1,7 +1,7 @@
-import { Fragment } from "react/jsx-runtime";
-import { convertStylesStringToObject } from "../../lib";
-import { lazy } from "react";
 import type { Block, Page } from "@src/types";
+import { lazy } from "react";
+import { Fragment } from "react/jsx-runtime";
+import { convertJSONToCSS } from "../../lib";
 const Carousel = lazy(() => import("@src/components/carousel"));
 
 interface Params {
@@ -13,34 +13,36 @@ interface Params {
   };
 }
 const Renderer = ({ data, render }: Params) => {
+  const containerName = "content-container";
   return (
-    <div style={{ ...convertStylesStringToObject(data.style) }}>
-      {data.sections?.map((section: any) => {
+    <div style={data.style}>
+      {data.sections?.map((section) => {
         const css = `
-      #${section.id} {
-        ${section.style}
-      }
-      @media (max-width: 768px) {
-        #${section.id} {
-          ${section.style_mobile}
-        } 
-      }
-    `;
+          #${section.id} {
+            ${convertJSONToCSS(section.style)}
+          }
+          @container ${containerName} (max-width: 768px) {
+            #${section.id} {
+              ${convertJSONToCSS(section.style_mobile)}
+          }
+        `;
         return (
           <Fragment key={section.id}>
             <style>{css}</style>
             <section id={section.id}>
-              {section.blocks?.map((block: any) => {
+              {section.blocks?.map((block) => {
                 return (
                   <div
                     key={`block-container-${block.id}`}
                     style={{
-                      ...convertStylesStringToObject(block.style ?? ""),
+                      ...block.style,
                     }}
                   >
                     {block.type === "html" && (
                       <div
-                        dangerouslySetInnerHTML={{ __html: block.content }}
+                        dangerouslySetInnerHTML={{
+                          __html: block.content ?? "",
+                        }}
                       />
                     )}
                     {block.type === "image" &&

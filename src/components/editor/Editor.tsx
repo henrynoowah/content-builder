@@ -12,10 +12,10 @@ import {
   rectSortingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
+import { convertJSONToCSS } from "@src/lib";
 import type { Block, Page, Section, SectionEditor } from "@src/types";
 import { lazy, useRef, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-import { convertStylesStringToObject } from "../../lib";
 
 const SectionEditor = lazy(() => import("./section-editor"));
 
@@ -74,7 +74,6 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
             (x) => x.id === selectedBlock?.id
           ) ?? 0;
 
-        console.log(selectedSection, blockIndex);
         selectedSectionRef.current.updateBlock(blockIndex, block);
       }
     }
@@ -88,24 +87,25 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
 
   const selectedSectionRef = useRef<SectionEditor>(null);
 
-  const onDrageEnd = ({ active, over }: DragEndEvent) => {
+  const onDragEnd = ({ active, over }: DragEndEvent) => {
     if (!over || active.id === over.id) return;
 
     const getPosition = (id: UniqueIdentifier) =>
       sections.findIndex((x) => x.id === id);
 
     const originalPos = getPosition(active.id);
-
     const newPos = getPosition(over.id);
 
-    setValue(`sections`, arrayMove(sections, originalPos, newPos));
+    if (originalPos !== -1 && newPos !== -1) {
+      setValue("sections", arrayMove<Section>(sections, originalPos, newPos));
+    }
   };
 
   return (
     <FormProvider {...methods}>
       <form
         style={{
-          ...convertStylesStringToObject(data?.style ?? ""),
+          ...data?.style,
           containerName,
         }}
         onSubmit={handleSubmit(onSubmitHandler, (err) => console.error(err))}
@@ -113,20 +113,19 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
         <DndContext
           sensors={sensors}
           collisionDetection={closestCorners}
-          onDragEnd={onDrageEnd}
+          onDragEnd={onDragEnd}
         >
           <SortableContext items={sections} strategy={rectSortingStrategy}>
             {sections.map((section, i) => {
               const css = `
-            #${section.id} {
-              ${section.style}
-            }
-            @container ${containerName} (max-width: 768px) {
-              #${section.id} {
-                ${section.style_mobile}
-              }
-            }
-          `;
+                #${section.id} {
+                  ${convertJSONToCSS(section.style)}
+                }
+                @container ${containerName} (max-width: 768px) {
+                  #${section.id} {
+                    ${convertJSONToCSS(section.style_mobile)}
+                }
+              `;
               return (
                 <div
                   key={`${section.id}`}
