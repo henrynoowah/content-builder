@@ -13,9 +13,11 @@ import { EditorContent, useEditor, FloatingMenu as FMenu } from "@tiptap/react";
 import CustomDiv from "./extensions/custom-div";
 import CommandsPlugin from "./extensions/commands/commands";
 import Heading from "@tiptap/extension-heading";
+import { CSSProperties } from "react";
 
 interface Params {
   content?: string;
+  style?: CSSProperties;
   onUpdate: (html?: string) => void;
   disabled?: boolean;
 }
@@ -25,6 +27,7 @@ interface Params {
 const TiptapEditor = ({
   // disabled
   content,
+  style,
   onUpdate,
 }: Params) => {
   const editor = useEditor({
@@ -101,8 +104,8 @@ const TiptapEditor = ({
   });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-      <EditorContent editor={editor} />
+    <div>
+      <EditorContent editor={editor} style={style} />
 
       {editor && (
         <FMenu editor={editor}>

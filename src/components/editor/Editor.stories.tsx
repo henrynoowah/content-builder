@@ -1,12 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import Editor from "./Editor";
-import SettingsTab from "./settings-tab";
+// import SettingsTab from "./settings-tab";
+import SettingsButton from "./settings-tab/SettingsButton";
 
 // Explicitly typing meta as Meta<typeof Editor>
 const meta: Meta<typeof Editor> = {
   title: "UI/Editor",
   component: (props) => (
-    <div className="nwcb-flex nwcb-justify-center">
+    <div className="nwcb-flex nwcb-justify-center px-4">
       <Editor {...props} />,
     </div>
   ),
@@ -21,7 +22,11 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: (props) => <SettingsTab {...props} />,
+    children: (props) => (
+      <div className="">
+        <SettingsButton {...props} />
+      </div>
+    ),
     onChange: () => {},
     onSubmit: () => {},
     data: {
@@ -49,6 +54,10 @@ export const Default: Story = {
             width: "100%",
             padding: "24px",
           },
+          style_mobile: {
+            width: "100%",
+            padding: "16px",
+          },
           blocks: [
             {
               type: "html",
@@ -66,6 +75,7 @@ export const Default: Story = {
           style: {
             display: "grid",
             gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+            gap: "16px",
           },
           style_mobile: {
             display: "grid",
@@ -77,6 +87,7 @@ export const Default: Story = {
               id: "block-1",
               type: "image",
               style: {
+                borderRadius: "16px",
                 padding: "16px",
               },
               src: "https://velog.velcdn.com/images/henrynoowah/post/19a650f1-1990-4b04-881e-6d8069219c0d/redux.png",
@@ -88,7 +99,7 @@ export const Default: Story = {
               id: "block-2",
               type: "html",
               style: {
-                padding: "16px",
+                // padding: "16px",
               },
               content:
                 "<p>I think I am getting used to the editor feature customization</p><p>Few things that I need to add for the test editor</p><br><p>I think I am getting used to the editor feature customization</p><p>Few things that I need to add for the test editor</p><br><p>I think I am getting used to the editor feature customization</p><p>Few things that I need to add for the test editor</p><br><br>",
@@ -98,7 +109,7 @@ export const Default: Story = {
               id: "block-3",
               type: "html",
               style: {
-                padding: "16px",
+                // padding: "16px",
               },
               content:
                 '<p>I think I am getting used to the editor feature customization</p><p>Few things that I need to add for the test editor</p><ul style="list-style: square;"><li style="margin: 0 0 0 1.25rem"><p>List item feature</p></li><li style="margin: 0 0 0 1.25rem"><p>Notion-like floating editor</p></li><li style="margin: 0 0 0 1.25rem"><p>Test</p></li><li style="margin: 0 0 0 1.25rem"><p>Test</p></li></ul><br>',
@@ -108,7 +119,7 @@ export const Default: Story = {
               type: "image",
               id: "block-4",
               style: {
-                padding: "16px",
+                borderRadius: "24px",
               },
               src: "https://velog.velcdn.com/images/henrynoowah/post/93456689-0b3f-4e18-a543-1f8ded385b18/next_TS.png",
               alt: "Our Team",
@@ -154,15 +165,17 @@ export const Default: Story = {
             {
               type: "gallery",
               id: "block-3",
-              style: {},
+              style: {
+                borderRadius: "24px",
+              },
               images: [
                 {
-                  src: "https://velog.velcdn.com/images/henrynoowah/post/cb5c90fb-81d9-492d-b6dc-9cbb3af6ab2a/image.png",
+                  src: "https://velog.velcdn.com/images/henrynoowah/post/19a650f1-1990-4b04-881e-6d8069219c0d/redux.png",
                   alt: "Image 1",
                   caption: "Image 1 caption",
                 },
                 {
-                  src: "https://velog.velcdn.com/images/henrynoowah/post/7db404ca-3263-49ab-8566-9922d0a0b3e9/image.png",
+                  src: "https://velog.velcdn.com/images/henrynoowah/post/93456689-0b3f-4e18-a543-1f8ded385b18/next_TS.png",
                   alt: "Image 2",
                   caption: "Image 2 caption",
                 },

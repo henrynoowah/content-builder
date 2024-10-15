@@ -1,14 +1,14 @@
 import { Block } from "@src/types";
 import useEmblaCarousel from "embla-carousel-react";
 
-const Carousel = ({ images }: Block) => {
+const Carousel = ({ images, style }: Block) => {
   const [emblaRef, emblaApi] = useEmblaCarousel();
 
   return (
     <div
       className="nwcb-w-full nwcb-h-full"
       ref={emblaRef}
-      style={{ overflow: "hidden" }}
+      style={{ overflow: "hidden", ...style }}
     >
       <div
         className="embla__container"

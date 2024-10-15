@@ -3,6 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Block } from "@src/types";
 import { forwardRef, lazy, useImperativeHandle } from "react";
 import { ImageBlock } from "./blocks";
+import { twMerge } from "tailwind-merge";
 const Carousel = lazy(() => import("@src/components/carousel"));
 
 const TiptapEditor = lazy(() => import("../tiptap/tiptap"));
@@ -22,7 +23,7 @@ const BlockEditor = forwardRef<Block, BlockProps>(
 
     const style = {
       transition,
-      transform: CSS.Transform.toString(transform),
+      transform: CSS.Translate.toString(transform),
     };
 
     useImperativeHandle(ref, () => block);
@@ -32,23 +33,29 @@ const BlockEditor = forwardRef<Block, BlockProps>(
         ref={setNodeRef}
         id={block.id}
         style={{
-          ...block.style,
+          // ...block.style,
           ...style,
         }}
         onClick={() => {
           // TODO - Set Block Context
           onSelect(block);
         }}
-        className="nwcb-relative group/block nwcb-ring-[1px] nwcb-ring-transparent hover:nwcb-ring-blue-400/60 nwcb-ring-inset nwcb-cursor-pointer"
+        className={twMerge(
+          `nwcb-relative group/block nwcb-ring-1 nwcb-ring-transparent hover:nwcb-ring-blue-400 nwcb-cursor-pointer`,
+          "focus-within:nwcb-ring-blue-400"
+        )}
         {...attributes}
         {...listeners}
       >
         {block.type === "html" && (
-          <TiptapEditor
-            key={`section-block-container-${block.id}`}
-            content={block.content}
-            onUpdate={(value) => onChange({ ...block, content: value })}
-          />
+          <div style={block.style}>
+            <TiptapEditor
+              key={`section-block-container-${block.id}`}
+              content={block.content}
+              style={block.style}
+              onUpdate={(value) => onChange({ ...block, content: value })}
+            />
+          </div>
         )}
         {block.type === "image" && (
           <ImageBlock key={`section-block-container-${block.id}`} {...block} />

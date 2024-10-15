@@ -11,6 +11,7 @@ const ImageBlock = (block: Block) => {
         height: "100%",
         objectFit: "contain",
         objectPosition: "center",
+        ...block.style,
       }}
     />
   );

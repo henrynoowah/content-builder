@@ -1,11 +1,12 @@
 import { CSSProperties } from "react";
 
 interface EditorContextProps {
-  section?: Section;
-  block?: Block;
+  data: Page;
+  selectedSection?: Section;
+  selectedBlock?: Block;
   sections?: Section[];
-  updateSection?: (section: Section) => void;
-  updateBlock?: (block: Block) => void;
+  updateSelectedSection?: (section: Section) => void;
+  updateSelectedBlock?: (block: Block) => void;
 }
 
 type Page = {

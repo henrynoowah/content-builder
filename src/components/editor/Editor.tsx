@@ -13,38 +13,32 @@ import {
   SortableContext,
 } from "@dnd-kit/sortable";
 import { convertJSONToCSS } from "@src/lib";
-import type { Block, Page, Section, SectionEditor } from "@src/types";
+import type {
+  Block,
+  Page,
+  Section,
+  SectionEditor,
+  EditorContextProps,
+} from "@src/types";
 import { lazy, useRef, useState } from "react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 
 const SectionEditor = lazy(() => import("./section-editor"));
 
-interface EditorContextProps {
-  section?: Section;
-  block?: Block;
-  sections?: Section[];
-  updateSection?: (section: Section) => void;
-  updateBlock?: (block: Block) => void;
-}
 interface EditorProps {
-  children?: ({
-    section,
-    block,
-    sections,
-    updateSection,
-    updateBlock,
-  }: EditorContextProps) => React.ReactNode;
-  data?: Page;
+  view?: "web" | "mobile";
+  data: Page;
   onChange?: (page: Page) => void;
   onSubmit?: (page: Page) => void;
+  children?: (ctx: EditorContextProps) => React.ReactNode;
 }
 
-const Editor = ({ data, onSubmit, children }: EditorProps) => {
+const Editor = ({ view = "web", data, onSubmit, children }: EditorProps) => {
   const methods = useForm<Page>({
     values: data,
   });
 
-  const { handleSubmit, control, setValue } = methods;
+  const { handleSubmit, control, setValue, watch } = methods;
 
   const { fields: sections, update: updateSection } = useFieldArray({
     control,
@@ -107,6 +101,7 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
         style={{
           ...data?.style,
           containerName,
+          maxWidth: view === "web" ? undefined : "768px",
         }}
         onSubmit={handleSubmit(onSubmitHandler, (err) => console.error(err))}
       >
@@ -137,7 +132,7 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
                   // ? Apply container properties
                   className={
                     selectedSection?.id === section.id
-                      ? "nwcb-ring-2 nwcb-ring-inset nwcb-ring-blue-400"
+                      ? "nwcb-ring-1 nwcb-ring-blue-400"
                       : ""
                   }
                 >
@@ -165,10 +160,11 @@ const Editor = ({ data, onSubmit, children }: EditorProps) => {
       </form>
 
       {children?.({
-        section: selectedSection,
-        block: selectedBlock,
-        updateSection: updateSectionHandler, // Pass updateSection method
-        updateBlock: updateBlockHandler,
+        data: watch(),
+        selectedSection,
+        selectedBlock,
+        updateSelectedSection: updateSectionHandler,
+        updateSelectedBlock: updateBlockHandler,
       })}
     </FormProvider>
   );

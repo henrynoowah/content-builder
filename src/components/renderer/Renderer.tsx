@@ -32,14 +32,12 @@ const Renderer = ({ data, render }: Params) => {
             <section id={section.id}>
               {section.blocks?.map((block) => {
                 return (
-                  <div
-                    key={`block-container-${block.id}`}
-                    style={{
-                      ...block.style,
-                    }}
-                  >
+                  <div key={`block-container-${block.id}`}>
                     {block.type === "html" && (
                       <div
+                        style={{
+                          ...block.style,
+                        }}
                         dangerouslySetInnerHTML={{
                           __html: block.content ?? "",
                         }}
@@ -58,6 +56,7 @@ const Renderer = ({ data, render }: Params) => {
                             height: "100%",
                             objectFit: "contain",
                             objectPosition: "center",
+                            ...block.style,
                           }}
                         />
                       ))}

@@ -1,9 +1,11 @@
 import {
-  closestCorners,
+  CollisionDetection,
   DndContext,
   DragEndEvent,
+  DragOverlay,
   DragStartEvent,
   PointerSensor,
+  rectIntersection,
   UniqueIdentifier,
   useSensor,
   useSensors,
@@ -15,9 +17,16 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Block, Page, Section, SectionEditor } from "@src/types";
+import {
+  Block,
+  Page,
+  Section,
+  SectionEditor as SectionEditorContext,
+} from "@src/types";
 import { forwardRef, lazy, useImperativeHandle, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 const BlockEditor = lazy(() => import("../block-editor"));
 
@@ -28,7 +37,7 @@ interface SectionEditorProps {
   index: number;
 }
 
-const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
+const SectionEditor = forwardRef<SectionEditorContext, SectionEditorProps>(
   ({ onSectionSelect, onBlockSelect, section, index }, ref) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({
@@ -37,7 +46,7 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
 
     const style = {
       transition,
-      transform: CSS.Transform.toString(transform),
+      transform: CSS.Translate.toString(transform),
     };
 
     const { control, watch } = useFormContext<Page>();
@@ -60,12 +69,12 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
       // useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
     );
 
-    const [_, setActiveId] = useState<UniqueIdentifier | null>(null);
-    const [selected, setSelected] = useState<Block | null>(null);
+    const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+    const [selectedBlock, setSelectedBlock] = useState<Block | null>(null);
 
     const onDragStart = ({ active }: DragStartEvent) => {
       setActiveId(active.id);
-      setSelected(active.data.current as Block);
+      onSectionSelect(section);
     };
 
     const onDragEnd = ({ active, over }: DragEndEvent) => {
@@ -88,18 +97,41 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
       replace(newArr);
 
       setActiveId(null);
-      setSelected(active.data.current as Block);
+      setSelectedBlock(active.data.current as Block);
     };
 
     useImperativeHandle(
       ref,
       () => ({
         section: watch(`sections.${index}`),
-        selectedBlock: selected,
+        selectedBlock,
         updateBlock: (i: number, block: Block) => update(i, block),
       }),
-      [selected, watch(`sections.${index}`)]
+      [selectedBlock]
     );
+
+    const fixCursorSnapOffset: CollisionDetection = (args) => {
+      // Bail out if keyboard activated
+      if (!args.pointerCoordinates) {
+        return rectIntersection(args);
+      }
+      const { x, y } = args.pointerCoordinates;
+      const { width, height } = args.collisionRect;
+      const updated = {
+        ...args,
+        // The collision rectangle is broken when using snapCenterToCursor. Reset
+        // the collision rectangle based on pointer location and overlay size.
+        collisionRect: {
+          width,
+          height,
+          bottom: y + height / 2,
+          left: x - width / 2,
+          right: x + width / 2,
+          top: y - height / 2,
+        },
+      };
+      return rectIntersection(updated);
+    };
 
     return (
       <section
@@ -120,7 +152,7 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
       >
         <DndContext
           sensors={sensors}
-          collisionDetection={closestCorners}
+          collisionDetection={fixCursorSnapOffset}
           onDragStart={onDragStart}
           onDragEnd={onDragEnd}
         >
@@ -130,7 +162,7 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
                 key={`block-container-${block.id}`}
                 onSelect={(block) => {
                   onBlockSelect(block);
-                  setSelected(block);
+                  setSelectedBlock(block);
                 }}
                 block={block}
                 onChange={(block) => update(i, block)}
@@ -138,15 +170,15 @@ const SectionEditor = forwardRef<SectionEditor, SectionEditorProps>(
             ))}
           </SortableContext>
 
-          {/* <DragOverlay>
+          <DragOverlay modifiers={[snapCenterToCursor]}>
             {activeId ? (
               <BlockEditor
                 block={blocks.find((x) => x.id === activeId) as Block}
                 onChange={() => {}}
-                onBlockSelect={() => {}}
+                onSelect={() => {}}
               />
             ) : null}
-          </DragOverlay> */}
+          </DragOverlay>
         </DndContext>
       </section>
     );

@@ -2,36 +2,37 @@ import { Block, EditorContextProps } from "@src/types";
 import { CSSProperties } from "react";
 
 const SettingsTab = ({
-  section,
-  updateSection,
-  block,
-  updateBlock,
+  data,
+  selectedSection,
+  updateSelectedSection,
+  selectedBlock,
+  updateSelectedBlock,
 }: EditorContextProps) => {
   return (
     <div className="nwcb-fixed nwcb-top-0 nwcb-end-0 nwcb-w-80 nwcb-h-full nwcb-bg-slate-100 nwcb-rounded-s-xl nwcb-p-4 nwcb-shadow-lg">
       <div className="nwcb-flex nwcb-flex-col nwcb-gap-4">
-        <p className="nwcb-text-lg nwcb-font-medium">{`${section?.id ?? ""} ${
-          block ? `/ ${block.id}` : ""
-        }`}</p>
+        <p className="nwcb-text-lg nwcb-font-medium">{`${
+          selectedSection?.id ?? ""
+        } ${selectedBlock ? `/ ${selectedBlock.id}` : ""}`}</p>
         <button
           onClick={() => {
-            if (section) {
-              updateSection?.({
-                ...section,
-                style: { ...section.style, gap: "16px" },
+            if (selectedSection) {
+              updateSelectedSection?.({
+                ...selectedSection,
+                style: { ...selectedSection.style, gap: "16px" },
               });
             }
           }}
         >
-          {section?.id}
+          {selectedSection?.id}
         </button>
 
         <StyleEditor
-          style={section?.style}
+          style={selectedSection?.style}
           onChange={(style) => {
-            if (section) {
-              updateSection?.({
-                ...section,
+            if (selectedSection) {
+              updateSelectedSection?.({
+                ...selectedSection,
                 style,
               });
             }
@@ -41,15 +42,15 @@ const SettingsTab = ({
 
       <hr className="nwcb-my-3" />
 
-      <div>Block: {block?.id}</div>
+      <div>Block: {selectedBlock?.id}</div>
 
       <button
         onClick={() => {
-          if (block) {
-            updateBlock?.({
-              ...block,
+          if (selectedBlock) {
+            updateSelectedBlock?.({
+              ...selectedBlock,
               style: {
-                ...block.style,
+                ...selectedBlock.style,
                 backgroundColor: "#5C9D60",
                 borderRadius: "24px",
                 color: "white",
@@ -58,13 +59,13 @@ const SettingsTab = ({
           }
         }}
       >
-        {block?.id}
+        {selectedBlock?.id}
       </button>
 
-      {block && (
+      {selectedBlock && (
         <BlockSetting
-          block={block}
-          onChange={(block) => updateBlock?.(block)}
+          block={selectedBlock}
+          onChange={(block) => updateSelectedBlock?.(block)}
         />
       )}
     </div>
@@ -84,18 +85,28 @@ const BlockSetting = ({
     case "html":
       return (
         <>
-          <StyleEditor
+          {/* <StyleEditor
             style={block.style}
             onChange={(style) => {
               onChange({ ...block, style });
             }}
-          />
+          /> */}
         </>
       );
     case "gallery":
       return "gallery";
     case "image":
-      return <ImageSetting block={block} />;
+      return (
+        <>
+          {/* <StyleEditor
+            style={block.style}
+            onChange={(style) => {
+              onChange({ ...block, style });
+            }}
+          /> */}
+          <ImageSetting block={block} />;
+        </>
+      );
     default:
       return <></>;
   }
@@ -103,7 +114,7 @@ const BlockSetting = ({
 
 const ImageSetting = ({ block }: { block: Block }) => {
   return (
-    <div className="nwcb-w-full nwcb-h-full">
+    <div className="nwcb-w-fit nwcb-h-fit">
       <img
         src={block.src}
         className="nwcb-w-full nwcb-h-fit nwcb-aspect-square nwcb-object-contain"
@@ -127,7 +138,8 @@ const StyleEditor = ({
         <div className="nwcb-flex nwcb-gap-2 nwcb-text-sm">
           <p>W: </p>
           <input
-            type="number"
+            type="text"
+            value={style?.maxWidth}
             className="nwcb-w-full nwcb-rounded focus-within:nwcb-outline-none"
             onChange={(e) => {
               onChange?.({
@@ -152,7 +164,8 @@ const StyleEditor = ({
         <div className="nwcb-flex nwcb-gap-2 nwcb-text-sm">
           <p>H: </p>
           <input
-            type="number"
+            type="text"
+            value={style?.minHeight}
             className="nwcb-w-full nwcb-rounded focus-within:nwcb-outline-none"
             onChange={(e) => {
               onChange?.({
@@ -163,18 +176,17 @@ const StyleEditor = ({
           />
         </div>
       </div>
-      {/* <div>
-        <p>Padding</p>
+      <div>
+        <p>Grid</p>
         <input
-          type="number"
+          type="text"
           onChange={(e) => {
             onChange?.({
               ...style,
-              padding: `${e.target.value}px`,
             });
           }}
         />
-      </div> */}
+      </div>
       {/* <div>
         <p>Padding</p>
         <input
