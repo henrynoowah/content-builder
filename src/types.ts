@@ -39,9 +39,11 @@ type SectionEditor = {
   updateBlock: (i: number, block: Block) => void;
 };
 
+type BlockType = "html" | "image" | "gallery";
+
 type Block = {
   id: string;
-  type: "html" | "image" | "gallery";
+  type: BlockType;
   style?: Partial<CSSProperties>;
   // ? image / gallery
   src?: string;
@@ -56,4 +58,11 @@ type Block = {
   content?: string;
 };
 
-export type { EditorContextProps, Page, Section, SectionEditor, Block };
+export type {
+  EditorContextProps,
+  Page,
+  Section,
+  SectionEditor,
+  Block,
+  BlockType,
+};

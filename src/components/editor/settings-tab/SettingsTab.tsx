@@ -81,35 +81,61 @@ const BlockSetting = ({
   block: Block;
   onChange: (block: Block) => void;
 }) => {
-  switch (block.type) {
-    case "html":
-      return (
-        <>
-          {/* <StyleEditor
+  const getBlockSettings = () => {
+    switch (block.type) {
+      case "html":
+        return (
+          <>
+            {/* <StyleEditor
             style={block.style}
             onChange={(style) => {
               onChange({ ...block, style });
-            }}
-          /> */}
-        </>
-      );
-    case "gallery":
-      return "gallery";
-    case "image":
-      return (
-        <>
-          {/* <StyleEditor
+              }}
+              /> */}
+          </>
+        );
+      case "gallery":
+        return "gallery";
+      case "image":
+        return (
+          <>
+            {/* <StyleEditor
             style={block.style}
             onChange={(style) => {
               onChange({ ...block, style });
-            }}
-          /> */}
-          <ImageSetting block={block} />;
-        </>
-      );
-    default:
-      return <></>;
-  }
+              }}
+              /> */}
+            <ImageSetting block={block} />;
+          </>
+        );
+      default:
+        return <></>;
+    }
+  };
+
+  return (
+    <div className="nwcb-flex nwcb-flex-col">
+      <div>
+        <p>Type</p>
+
+        <select
+          onChange={(e) => {
+            if (
+              e.target.value === "html" ||
+              e.target.value === "image" ||
+              e.target.value === "gallery"
+            )
+              onChange({ ...block, type: e.target.value });
+          }}
+        >
+          <option value={"html"}>HTML</option>
+          <option value={"image"}>Image</option>
+          <option value={"gallery"}>Gallery</option>
+        </select>
+      </div>
+      {getBlockSettings()}
+    </div>
+  );
 };
 
 const ImageSetting = ({ block }: { block: Block }) => {

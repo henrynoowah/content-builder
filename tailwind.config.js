@@ -4,6 +4,6 @@ module.exports = {
   darkMode: ['class', '[data-mode="dark"]'],
   prefix: "nwcb-",
   corePlugins: {
-    preflight: false,
+    // preflight: false,
   },
 };
