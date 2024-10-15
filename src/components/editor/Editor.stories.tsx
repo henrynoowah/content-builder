@@ -79,7 +79,7 @@ export const Default: Story = {
               style: {
                 padding: "16px",
               },
-              src: "https://velog.velcdn.com/images/henrynoowah/post/cb5c90fb-81d9-492d-b6dc-9cbb3af6ab2a/image.png",
+              src: "https://velog.velcdn.com/images/henrynoowah/post/19a650f1-1990-4b04-881e-6d8069219c0d/redux.png",
               alt: "Our Team",
               caption: "Meet Our Team",
               images: [],
@@ -110,7 +110,7 @@ export const Default: Story = {
               style: {
                 padding: "16px",
               },
-              src: "https://velog.velcdn.com/images/henrynoowah/post/7db404ca-3263-49ab-8566-9922d0a0b3e9/image.png",
+              src: "https://velog.velcdn.com/images/henrynoowah/post/93456689-0b3f-4e18-a543-1f8ded385b18/next_TS.png",
               alt: "Our Team",
               caption: "Meet Our Team",
               images: [],

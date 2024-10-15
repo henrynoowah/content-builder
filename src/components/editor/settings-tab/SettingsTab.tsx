@@ -106,7 +106,7 @@ const ImageSetting = ({ block }: { block: Block }) => {
     <div className="nwcb-w-full nwcb-h-full">
       <img
         src={block.src}
-        className="nwcb-w-full nwcb-h-fit nwcb-aspect-square"
+        className="nwcb-w-full nwcb-h-fit nwcb-aspect-square nwcb-object-contain"
       />
     </div>
   );
@@ -122,31 +122,48 @@ const StyleEditor = ({
   return (
     <div className="nwcb-flex nwcb-flex-col nwcb-gap-4">
       <p>Layout</p>
-      <div>
-        <p>Width</p>
-        <input
-          type="number"
-          onChange={(e) => {
-            onChange?.({
-              ...style,
-              maxWidth: `${e.target.value}px`,
-            });
-          }}
-        />
+
+      <div className="nwcb-grid nwcb-grid-cols-2 nwcb-gap-4">
+        <div className="nwcb-flex nwcb-gap-2 nwcb-text-sm">
+          <p>W: </p>
+          <input
+            type="number"
+            className="nwcb-w-full nwcb-rounded focus-within:nwcb-outline-none"
+            onChange={(e) => {
+              onChange?.({
+                ...style,
+                maxWidth: `${e.target.value}px`,
+              });
+            }}
+          />
+          <button
+            type="button"
+            className="nwcb-w-full nwcb-rounded focus-within:nwcb-outline-none"
+            onClick={(e) => {
+              onChange?.({
+                ...style,
+                maxWidth: `100%`,
+              });
+            }}
+          >
+            Fill
+          </button>
+        </div>
+        <div className="nwcb-flex nwcb-gap-2 nwcb-text-sm">
+          <p>H: </p>
+          <input
+            type="number"
+            className="nwcb-w-full nwcb-rounded focus-within:nwcb-outline-none"
+            onChange={(e) => {
+              onChange?.({
+                ...style,
+                minHeight: `${e.target.value}px`,
+              });
+            }}
+          />
+        </div>
       </div>
-      <div>
-        <p>Minimum Height</p>
-        <input
-          type="number"
-          onChange={(e) => {
-            onChange?.({
-              ...style,
-              minHeight: `${e.target.value}px`,
-            });
-          }}
-        />
-      </div>
-      <div>
+      {/* <div>
         <p>Padding</p>
         <input
           type="number"
@@ -157,7 +174,7 @@ const StyleEditor = ({
             });
           }}
         />
-      </div>
+      </div> */}
       {/* <div>
         <p>Padding</p>
         <input
