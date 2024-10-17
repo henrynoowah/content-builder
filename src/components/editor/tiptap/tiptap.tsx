@@ -13,6 +13,7 @@ import { EditorContent, useEditor, FloatingMenu as FMenu } from "@tiptap/react";
 import CustomDiv from "./extensions/custom-div";
 import CommandsPlugin from "./extensions/commands/commands";
 import Heading from "@tiptap/extension-heading";
+import HardBreak from "@tiptap/extension-hard-break";
 import { CSSProperties } from "react";
 
 interface Params {
@@ -81,26 +82,33 @@ const TiptapEditor = ({
         },
       }),
       CommandsPlugin,
-      // HardBreak.configure({
-      //   keepMarks: true,
-      //   HTMLAttributes: {
-      //     style: "",
-      //   },
-      // }),
+      HardBreak.configure({
+        keepMarks: false,
+        HTMLAttributes: {
+          style: "",
+        },
+      }),
     ],
+    onCreate(props) {
+      console.log(props.editor.getHTML());
+    },
     onUpdate: ({
       editor,
       //  transaction
     }) => {
       // onUpdate(editor.getHTML())
-      onUpdate(
-        editor
-          .getHTML()
-          // ? reaplce empty paragraph to a <br> line break to match rendred HTML
-          .replaceAll("<p></p>", "<br>")
-      );
+
+      const updated = editor
+        .getHTML()
+        // ? replace empty paragraph to a <br> line break to match rendred HTML
+        .replaceAll("<p></p>", "<br>");
+
+      onUpdate(updated);
+
+      console.log(updated);
     },
-    content: content ?? "<p>Hello World! 🌎️</p>",
+    content:
+      content?.replaceAll("<br>", "<p></p>") ?? "<p>Hello World! 🌎️</p>",
   });
 
   return (

@@ -9,7 +9,7 @@ const SettingsTab = ({
   updateSelectedBlock,
 }: EditorContextProps) => {
   return (
-    <div className="nwcb-fixed nwcb-top-0 nwcb-end-0 nwcb-w-80 nwcb-h-full nwcb-bg-slate-100 nwcb-rounded-s-xl nwcb-p-4 nwcb-shadow-lg">
+    <div className="nwcb-fixed nwcb-top-0 nwcb-end-0 nwcb-w-80 nwcb-h-full nwcb-bg-slate-100 nwcb-p-4 nwcb-shadow-lg">
       <div className="nwcb-flex nwcb-flex-col nwcb-gap-4">
         <p className="nwcb-text-lg nwcb-font-medium">{`${
           selectedSection?.id ?? ""
