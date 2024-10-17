@@ -30,45 +30,17 @@ export const Default: Story = {
       },
       // style: "width: 1024px; max-width: 100%;",
       style: {
-        width: "1024px",
+        width: "100%",
         maxWidth: "100%",
       },
       sections: [
-        {
-          id: "section-0",
-          order: 1,
-          style: {
-            display: "block",
-            width: "100%",
-            maxHeight: "420px",
-            overflow: "hidden",
-            padding: "24px",
-          },
-          style_mobile: {
-            width: "100%",
-            // padding: "16px",
-          },
-          blocks: [
-            {
-              type: "html",
-              id: "block-1",
-              content:
-                "<h1>Showcase</h1><p>This page showcase the noowah/content-builder page editor</p>",
-              src: "https://images.pexels.com/photos/3381115/pexels-photo-3381115.jpeg",
-              images: [],
-              style: {
-                objectFit: "cover",
-              },
-            },
-          ],
-        },
         {
           id: "section-1",
           order: 1,
           style: {
             display: "block",
             width: "100%",
-            maxHeight: "420px",
+            maxHeight: "620px",
             overflow: "hidden",
             // padding: "24px",
           },
@@ -94,6 +66,10 @@ export const Default: Story = {
           id: "section-2",
           order: 1,
           style: {
+            width: "1280px",
+            maxWidth: "100%",
+            paddingTop: "24px",
+            margin: "auto",
             display: "grid",
             gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
             // gap: "16px",
@@ -105,18 +81,17 @@ export const Default: Story = {
           },
           blocks: [
             {
-              id: "block-1",
               type: "image",
+              id: "block-1",
               style: {
-                // borderRadius: "16px",
-                // padding: "16px",
-                objectFit: "contain",
+                // borderRadius: "24px",
               },
-              src: "https://images.pexels.com/photos/63430/pexels-photo-63430.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              src: "https://images.pexels.com/photos/20607063/pexels-photo-20607063/free-photo-of-close-up-of-the-facade-of-an-apartment-building-with-balconies.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
               alt: "Our Team",
               caption: "Meet Our Team",
               images: [],
             },
+
             {
               id: "block-2",
               type: "html",
@@ -138,12 +113,14 @@ export const Default: Story = {
               images: [],
             },
             {
-              type: "image",
               id: "block-4",
+              type: "image",
               style: {
-                // borderRadius: "24px",
+                // borderRadius: "16px",
+                // padding: "16px",
+                objectFit: "contain",
               },
-              src: "https://images.pexels.com/photos/20607063/pexels-photo-20607063/free-photo-of-close-up-of-the-facade-of-an-apartment-building-with-balconies.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+              src: "https://images.pexels.com/photos/63430/pexels-photo-63430.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
               alt: "Our Team",
               caption: "Meet Our Team",
               images: [],
@@ -174,12 +151,14 @@ export const Default: Story = {
           id: "section-3",
           order: 1,
           style: {
+            width: "1280px",
+            maxWidth: "100%",
+            margin: "auto",
             display: "grid",
             gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
             gap: "16px",
           },
           style_mobile: {
-            display: "grid",
             gridTemplateColumns: "repeat(1, minmax(0, 1fr))",
             gap: "16px",
           },
@@ -188,6 +167,7 @@ export const Default: Story = {
               type: "gallery",
               id: "block-3",
               style: {
+                // width: "100%",
                 // borderRadius: "24px",
               },
               images: [

@@ -713,11 +713,6 @@ h6 {
   border-radius: 0.25rem;
 }
 
-.nwcb-rounded-s-xl {
-  border-start-start-radius: 0.75rem;
-  border-end-start-radius: 0.75rem;
-}
-
 .nwcb-bg-slate-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(241 245 249 / var(--tw-bg-opacity));
@@ -748,6 +743,10 @@ h6 {
 
 .nwcb-font-medium {
   font-weight: 500;
+}
+
+.nwcb-opacity-30 {
+  opacity: 0.3;
 }
 
 .nwcb-shadow-lg {

@@ -89,9 +89,6 @@ const TiptapEditor = ({
         },
       }),
     ],
-    onCreate(props) {
-      console.log(props.editor.getHTML());
-    },
     onUpdate: ({
       editor,
       //  transaction

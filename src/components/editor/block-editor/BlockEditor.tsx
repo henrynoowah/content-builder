@@ -33,7 +33,6 @@ const BlockEditor = forwardRef<Block, BlockProps>(
         ref={setNodeRef}
         id={block.id}
         style={{
-          // ...block.style,
           ...style,
         }}
         onClick={() => {
@@ -48,14 +47,12 @@ const BlockEditor = forwardRef<Block, BlockProps>(
         {...listeners}
       >
         {block.type === "html" && (
-          <div style={block.style}>
-            <TiptapEditor
-              key={`section-block-container-${block.id}`}
-              content={block.content}
-              style={block.style}
-              onUpdate={(value) => onChange({ ...block, content: value })}
-            />
-          </div>
+          <TiptapEditor
+            key={`section-block-container-${block.id}`}
+            content={block.content}
+            style={block.style}
+            onUpdate={(value) => onChange({ ...block, content: value })}
+          />
         )}
         {block.type === "image" && (
           <ImageBlock key={`section-block-container-${block.id}`} {...block} />

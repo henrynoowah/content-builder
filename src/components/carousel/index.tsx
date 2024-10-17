@@ -2,7 +2,7 @@ import { Block } from "@src/types";
 import useEmblaCarousel from "embla-carousel-react";
 
 const Carousel = ({ images, style }: Block) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel();
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
   return (
     <div

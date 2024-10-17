@@ -27,6 +27,7 @@ import { forwardRef, lazy, useImperativeHandle, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import { PositionedOverlay } from "@dnd-kit/core/dist/components/DragOverlay/components";
 
 const BlockEditor = lazy(() => import("../block-editor"));
 
@@ -144,9 +145,11 @@ const SectionEditor = forwardRef<SectionEditorContext, SectionEditorProps>(
           onSectionSelect(section);
         }}
         className="nwcb-h-fit"
-        style={{
-          ...style,
-        }}
+        style={
+          {
+            // ...style,
+          }
+        }
         {...attributes}
         {...listeners}
       >
@@ -172,11 +175,13 @@ const SectionEditor = forwardRef<SectionEditorContext, SectionEditorProps>(
 
           <DragOverlay modifiers={[snapCenterToCursor]}>
             {activeId ? (
-              <BlockEditor
-                block={blocks.find((x) => x.id === activeId) as Block}
-                onChange={() => {}}
-                onSelect={() => {}}
-              />
+              <div className="nwcb-opacity-30">
+                <BlockEditor
+                  block={blocks.find((x) => x.id === activeId) as Block}
+                  onChange={() => {}}
+                  onSelect={() => {}}
+                />
+              </div>
             ) : null}
           </DragOverlay>
         </DndContext>

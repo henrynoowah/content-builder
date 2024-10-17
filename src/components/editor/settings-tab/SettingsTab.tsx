@@ -162,15 +162,19 @@ const StyleEditor = ({
 
       <div className="nwcb-grid nwcb-grid-cols-2 nwcb-gap-4">
         <div className="nwcb-flex nwcb-gap-2 nwcb-text-sm">
+          {/* 
+            // TODO - width layout 
+            // * full
+          */}
           <p>W: </p>
           <input
             type="text"
-            value={style?.maxWidth}
+            value={style?.width}
             className="nwcb-w-full nwcb-rounded focus-within:nwcb-outline-none"
             onChange={(e) => {
               onChange?.({
                 ...style,
-                maxWidth: `${e.target.value}px`,
+                width: `${e.target.value}px`,
               });
             }}
           />
@@ -188,10 +192,15 @@ const StyleEditor = ({
           </button>
         </div>
         <div className="nwcb-flex nwcb-gap-2 nwcb-text-sm">
+          {/* 
+            // TODO - height layout 
+            // * fit-content
+            // * fit-content
+          */}
           <p>H: </p>
           <input
             type="text"
-            value={style?.minHeight}
+            value={style?.height}
             className="nwcb-w-full nwcb-rounded focus-within:nwcb-outline-none"
             onChange={(e) => {
               onChange?.({
