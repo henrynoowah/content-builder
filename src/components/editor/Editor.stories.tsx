@@ -22,11 +22,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: (props) => (
-      <div className="">
-        <SettingsButton {...props} />
-      </div>
-    ),
+    children: (props) => <SettingsButton {...props} />,
     onChange: () => {},
     onSubmit: () => {},
     data: {
